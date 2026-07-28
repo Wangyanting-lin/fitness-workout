@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#7AC74F">
+  <title>运动锻炼工作台</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="运动锻炼">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="phone-frame">
+
+    <!-- 顶部状态栏 -->
+    <div class="statusbar">
+      <div class="left">12:14</div>
+      <div class="right">
+        <span>●●●●</span>
+        <span>📶</span>
+        <span>📡</span>
+        <div class="battery"><div class="fill"></div></div>
+      </div>
+    </div>
+
+    <!-- 左侧栏 -->
+    <aside class="sidebar">
+      <button class="back-btn" title="返回">‹</button>
+      <div class="time-display">10:30</div>
+
+      <nav class="nav-list">
+        <button class="nav-item" data-page="plan">
+          <span class="nav-icon">📅</span><span class="lbl">每日计划</span>
+        </button>
+        <button class="nav-item" data-page="outfit">
+          <span class="nav-icon">👔</span><span class="lbl">每日穿搭</span>
+        </button>
+        <button class="nav-item" data-page="mood">
+          <span class="nav-icon">♡</span><span class="lbl">心情</span>
+        </button>
+        <button class="nav-item" data-page="english">
+          <span class="nav-icon">🌐</span><span class="lbl">英语学习</span>
+        </button>
+        <button class="nav-item active" data-page="workout">
+          <span class="nav-icon">🎯</span><span class="lbl">运动锻炼</span>
+        </button>
+        <button class="nav-item" data-page="reading">
+          <span class="nav-icon">📖</span><span class="lbl">读书记录</span>
+        </button>
+        <button class="nav-item" data-page="kids">
+          <span class="nav-icon">👶</span><span class="lbl">亲子启蒙</span>
+        </button>
+        <button class="nav-item" data-page="ecom">
+          <span class="nav-icon">🛒</span><span class="lbl">电商学习</span>
+        </button>
+        <button class="nav-item" data-page="treehole">
+          <span class="nav-icon">🛡</span><span class="lbl">树洞</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main">
+
+      <!-- 运动锻炼页（默认） -->
+      <section class="subpage show" data-page="workout">
+        <!-- 目标卡 -->
+        <div class="goal-card">
+          <div>
+            <div class="lbl">小基数减脂 · 当前阶段</div>
+            <div class="val">紧致塑形期</div>
+          </div>
+          <div class="right">
+            <div class="lbl">目标</div>
+            <div class="badge">体脂 -3% / 围度收紧</div>
+          </div>
+        </div>
+
+        <!-- 强度选择 -->
+        <div class="intensity-bar" id="intensityBar">
+          <div class="chip on" data-level="1">轻度<small>燃脂为主</small></div>
+          <div class="chip" data-level="2">中度<small>塑形增肌</small></div>
+          <div class="chip" data-level="3">强度<small>突破平台</small></div>
+        </div>
+
+        <div class="date-strip" id="dateStrip"></div>
+
+        <div class="timer-card">
+          <div class="timer-ring">
+            <svg width="240" height="240" viewBox="0 0 240 240">
+              <circle class="ring-bg" cx="120" cy="120" r="108"/>
+              <circle class="ring-fg" id="ringFg" cx="120" cy="120" r="108"
+                      stroke-dasharray="678.58" stroke-dashoffset="0"/>
+            </svg>
+            <div class="timer-text">
+              <div class="time" id="timerText">40:00</div>
+              <div class="lbl">今日训练</div>
+            </div>
+          </div>
+          <div class="timer-actions">
+            <button class="btn btn-start" id="btnStart">开始训练</button>
+            <button class="btn btn-reset" id="btnReset">重置</button>
+          </div>
+        </div>
+
+        <div class="course-grid" id="courseGrid"></div>
+
+        <!-- 饮食打卡 -->
+        <div class="diet-card">
+          <h3>🥗 今日饮食 · 小基数专属</h3>
+          <div class="diet-row"><span class="meal">🍳</span><div class="info"><div class="name">早餐 · 高蛋白</div><div class="kcal">鸡蛋 + 牛奶 + 燕麦 ≈ 320kcal</div></div><div class="check">✓</div></div>
+          <div class="diet-row"><span class="meal">🥗</span><div class="info"><div class="name">午餐 · 均衡</div><div class="kcal">糙米 + 鸡胸 + 时蔬 ≈ 450kcal</div></div><div class="check">✓</div></div>
+          <div class="diet-row"><span class="meal">🍎</span><div class="info"><div class="name">加餐 · 控糖</div><div class="kcal">无糖酸奶 + 坚果 ≈ 150kcal</div></div><div class="check">✓</div></div>
+          <div class="diet-row"><span class="meal">🐟</span><div class="info"><div class="name">晚餐 · 轻量</div><div class="kcal">鱼 + 蔬菜沙拉 ≈ 280kcal</div></div><div class="check">✓</div></div>
+        </div>
+
+        <!-- 本周训练计划 -->
+        <div class="week-plan" id="weekPlan"></div>
+
+        <!-- 贴士 -->
+        <div class="tip-card">
+          <h4>💡 小基数减脂核心原则</h4>
+          <ul>
+            <li>别盯体重秤，看围度和镜子里身材变化</li>
+            <li>力量训练 &gt; 有氧，肌肉多了代谢自然上去</li>
+            <li>蛋白质吃够体重 × 1.2-1.5g，保肌肉不挨饿</li>
+            <li>每周训练 4-5 次，每次 30-45 分钟即可</li>
+            <li>睡眠 7-8 小时，睡不好脂肪代谢会变慢</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 每日计划 -->
+      <section class="subpage" data-page="plan">
+        <h2 class="subpage-title">📅 每日计划</h2>
+        <div class="subpage-card">
+          <h3>今日任务</h3>
+          <div class="item"><span class="ico">🌅</span><div class="txt"><h4>早起晨练 15 分钟</h4><p>06:30 - 06:45</p></div><button class="btn-sm">完成</button></div>
+          <div class="item"><span class="ico">📚</span><div class="txt"><h4>阅读 1 小时</h4><p>20:00 - 21:00</p></div><button class="btn-sm">完成</button></div>
+          <div class="item"><span class="ico">💧</span><div class="txt"><h4>喝够 8 杯水</h4><p>全天分散</p></div><button class="btn-sm">完成</button></div>
+        </div>
+      </section>
+
+      <!-- 每日穿搭 -->
+      <section class="subpage" data-page="outfit">
+        <h2 class="subpage-title">👔 每日穿搭</h2>
+        <div class="subpage-card">
+          <p style="margin-bottom:12px;color:var(--gray-600);font-size:13px">记录今天的穿搭，给自己一份仪式感 ✨</p>
+          <div class="item"><span class="ico">👕</span><div class="txt"><h4>上衣</h4><p>白色 T 恤</p></div></div>
+          <div class="item"><span class="ico">👖</span><div class="txt"><h4>下装</h4><p>浅蓝牛仔裤</p></div></div>
+          <div class="item"><span class="ico">👟</span><div class="txt"><h4>鞋子</h4><p>白色运动鞋</p></div></div>
+        </div>
+      </section>
+
+      <!-- 心情 -->
+      <section class="subpage" data-page="mood">
+        <h2 class="subpage-title">♡ 心情日记</h2>
+        <div class="subpage-card">
+          <p>今天心情如何？点击表情记录 →</p>
+          <div style="display:flex;justify-content:space-around;font-size:32px;margin-top:14px">
+            <button class="mood-btn">😊</button>
+            <button class="mood-btn">😌</button>
+            <button class="mood-btn">😐</button>
+            <button class="mood-btn">😣</button>
+            <button class="mood-btn">😭</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 英语学习 -->
+      <section class="subpage" data-page="english">
+        <h2 class="subpage-title">🌐 英语学习</h2>
+
+        <!-- 场景切换 -->
+        <div class="eng-tabs" id="engTabs">
+          <button class="eng-tab on" data-scene="daily">日常通用</button>
+          <button class="eng-tab" data-scene="travel">旅游出行</button>
+          <button class="eng-tab" data-scene="bags">箱包电商</button>
+        </div>
+
+        <!-- 学习进度 -->
+        <div class="eng-progress" id="engProgress">
+          <div class="bar-wrap"><div class="bar-inner" id="engBar" style="width:0%"></div></div>
+          <div class="stats" id="engStats">0/8</div>
+        </div>
+
+        <!-- 闪卡复习 -->
+        <div class="flashcard" id="flashcard">
+          <div class="inner">
+            <div class="front">
+              <div class="en" id="fcEn">Hello</div>
+              <div class="hint" id="fcHint">点击翻转看释义</div>
+            </div>
+            <div class="back">
+              <div class="cn" id="fcCn">你好</div>
+              <div class="pron" id="fcPron">/həˈloʊ/</div>
+            </div>
+          </div>
+        </div>
+        <p class="hint-text">👆 点击翻转 / 🔈 长按发音 / 右滑标记已学 / 左滑跳过</p>
+
+        <!-- 每日一句 -->
+        <div class="daily-quote" id="dailyQuote"></div>
+
+        <!-- 场景内容区 -->
+        <div id="engContent"></div>
+
+        <!-- 今日新词 -->
+        <div class="subpage-card" id="engWords"></div>
+      </section>
+
+      <!-- 读书记录 -->
+      <section class="subpage" data-page="reading">
+        <h2 class="subpage-title">📖 读书记录</h2>
+        <div class="subpage-card">
+          <h3>在读书目</h3>
+          <div class="item"><span class="ico">📕</span><div class="txt"><h4>《原子习惯》</h4><p>已读 72% · 第 5 章</p></div><button class="btn-sm">继续</button></div>
+          <div class="item"><span class="ico">📗</span><div class="txt"><h4>《被讨厌的勇气》</h4><p>已读 45% · 第 3 章</p></div><button class="btn-sm">继续</button></div>
+        </div>
+      </section>
+
+      <!-- 亲子启蒙（新） -->
+      <section class="subpage" data-page="kids">
+        <h2 class="subpage-title">👶 亲子启蒙</h2>
+        <div class="subpage-card">
+          <h3>启蒙主题</h3>
+          <div class="item"><span class="ico">🎨</span><div class="txt"><h4>艺术启蒙</h4><p>绘画、手工、色彩认知</p></div><button class="btn-sm">开始</button></div>
+          <div class="item"><span class="ico">🎵</span><div class="txt"><h4>音乐启蒙</h4><p>儿歌、节奏、乐器体验</p></div><button class="btn-sm">开始</button></div>
+          <div class="item"><span class="ico">🔤</span><div class="txt"><h4>语言启蒙</h4><p>绘本共读、识字游戏</p></div><button class="btn-sm">开始</button></div>
+          <div class="item"><span class="ico">🧩</span><div class="txt"><h4>逻辑思维</h4><p>拼图、分类、推理</p></div><button class="btn-sm">开始</button></div>
+        </div>
+      </section>
+
+      <!-- 电商学习（新） -->
+      <section class="subpage" data-page="ecom">
+        <h2 class="subpage-title">🛒 电商学习</h2>
+        <div class="subpage-card">
+          <h3>今日课题</h3>
+          <div class="item"><span class="ico">📊</span><div class="txt"><h4>选品分析</h4><p>市场调研 · 蓝海词挖掘</p></div><button class="btn-sm">学习</button></div>
+          <div class="item"><span class="ico">📸</span><div class="txt"><h4>主图设计</h4><p>视觉营销 · 卖点提炼</p></div><button class="btn-sm">学习</button></div>
+          <div class="item"><span class="ico">📝</span><div class="txt"><h4>详情页文案</h4><p>痛点场景 · FAB 法则</p></div><button class="btn-sm">学习</button></div>
+          <div class="item"><span class="ico">📈</span><div class="txt"><h4>直通车投放</h4><p>关键词出价 · ROI 优化</p></div><button class="btn-sm">学习</button></div>
+        </div>
+      </section>
+
+      <!-- 树洞 -->
+      <section class="subpage" data-page="treehole">
+        <h2 class="subpage-title">🛡 树洞</h2>
+        <div class="subpage-card">
+          <p style="color:var(--gray-600)">这里没有评价，只有倾听。<br>把不开心的事写下来，让它随风而去吧 🌿</p>
+          <textarea placeholder="今天想说的话…" style="width:100%;min-height:120px;margin-top:12px;padding:10px;border-radius:12px;border:1px solid var(--gray-200);font-size:13px;resize:none;outline:none"></textarea>
+          <button class="btn-sm" style="margin-top:10px;background:var(--green);color:#fff;padding:10px 20px">埋进树洞</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('./sw.js').then(function(){
+        console.log('SW registered');
+      });
+    }
+  </script>
+</body>
+</html>

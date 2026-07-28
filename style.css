@@ -1,0 +1,397 @@
+/* ============ 全局 ============ */
+:root{
+  --green:#7AC74F;
+  --green-dark:#5BA838;
+  --green-light:#E8F5DC;
+  --green-bg:#C7E3A8;
+  --green-pill:#A6CC8A;
+  --gray-50:#F7F5F0;
+  --gray-100:#EFEDE6;
+  --gray-200:#D9D6CB;
+  --gray-300:#B7B3A5;
+  --gray-600:#5E5B51;
+  --text:#2A2A28;
+  --shadow-sm:0 2px 8px rgba(0,0,0,.06);
+  --shadow-md:0 4px 16px rgba(0,0,0,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:#2C2C2C;line-height:1.5}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+
+/* 整个设备框 - 手机外壳 */
+.phone-frame{
+  width:390px;height:844px;margin:24px auto;background:#F7F5F0;
+  border-radius:54px;overflow:hidden;position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,.45), inset 0 0 0 4px #1a1a1a;
+  display:flex;
+}
+
+/* ============ 左侧栏 ============ */
+.sidebar{
+  width:88px;flex-shrink:0;background:transparent;
+  display:flex;flex-direction:column;align-items:center;
+  padding:60px 0 20px;position:relative;z-index:2
+}
+.back-btn{
+  position:absolute;left:14px;top:64px;
+  font-size:22px;color:var(--text);background:none;border:none;cursor:pointer;
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center
+}
+.time-display{
+  margin-top:18px;font-size:14px;font-weight:700;color:var(--text);
+  letter-spacing:.5px
+}
+.nav-list{
+  margin-top:28px;display:flex;flex-direction:column;gap:18px;width:100%;align-items:center
+}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:5px;width:100%;
+  background:none;border:none;cursor:pointer;color:var(--text);font-size:11px;
+  font-weight:500;opacity:.78;transition:opacity .2s
+}
+.nav-item .nav-icon{
+  width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  font-size:24px;color:var(--text);opacity:.85
+}
+.nav-item.active{opacity:1}
+.nav-item.active .nav-icon{color:var(--green-dark)}
+.nav-item.active .lbl{font-weight:700}
+.nav-item.active::before{
+  content:"";position:absolute;left:-2px;width:3px;height:34px;
+  background:var(--green-dark);border-radius:0 2px 2px 0
+}
+.nav-item{position:relative}
+.nav-item .lbl{white-space:nowrap;font-size:11px}
+
+/* ============ 主内容区 ============ */
+.main{
+  flex:1;background:linear-gradient(180deg,#F7F5F0 0%,#EFEDE6 100%);
+  padding:60px 16px 24px;overflow-y:auto;position:relative;
+  border-radius:40px 0 0 40px
+}
+.main::-webkit-scrollbar{display:none}
+
+/* ============ 日期选择 ============ */
+.date-strip{
+  background:#fff;border-radius:30px;padding:14px 18px;
+  display:flex;justify-content:space-between;align-items:center;
+  box-shadow:var(--shadow-sm);margin-bottom:14px
+}
+.date-strip .d{
+  flex:1;text-align:center;font-size:15px;font-weight:600;color:#5E5B51;cursor:pointer;
+  padding:6px 0;border-radius:50%;transition:all .2s;line-height:1
+}
+.date-strip .d.sel{
+  background:var(--green-pill);color:#2D4A1A;font-weight:700
+}
+
+/* ============ 计时卡片 ============ */
+.timer-card{
+  background:#fff;border-radius:24px;padding:24px 18px;
+  display:flex;flex-direction:column;align-items:center;
+  box-shadow:var(--shadow-md);margin-bottom:14px
+}
+.timer-ring{
+  width:240px;height:240px;position:relative;
+  display:flex;align-items:center;justify-content:center
+}
+.timer-ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.timer-ring .ring-bg{fill:none;stroke:var(--green-light);stroke-width:8}
+.timer-ring .ring-fg{
+  fill:none;stroke:var(--green);stroke-width:8;stroke-linecap:round;
+  transition:stroke-dashoffset 1s linear
+}
+.timer-text{
+  text-align:center;display:flex;flex-direction:column;align-items:center
+}
+.timer-text .time{
+  font-size:54px;font-weight:800;color:var(--text);line-height:1;
+  font-variant-numeric:tabular-nums;letter-spacing:-1px
+}
+.timer-text .lbl{
+  font-size:13px;color:var(--gray-600);margin-top:8px;letter-spacing:2px
+}
+
+.timer-actions{
+  display:flex;gap:12px;margin-top:18px;width:100%;padding:0 4px
+}
+.timer-actions .btn{
+  flex:1;border:none;border-radius:24px;padding:14px;
+  font-size:15px;font-weight:600;cursor:pointer;transition:all .2s
+}
+.btn-start{background:var(--green);color:#fff}
+.btn-start:hover{background:var(--green-dark)}
+.btn-reset{background:var(--gray-100);color:var(--text)}
+.btn-reset:hover{background:var(--gray-200)}
+
+/* ============ 课程卡片网格 ============ */
+.course-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px
+}
+.course-card{
+  background:#fff;border-radius:18px;overflow:hidden;
+  box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .2s
+}
+.course-card:active{transform:scale(.98)}
+.course-card.full{grid-column:span 2}
+.course-thumb{
+  position:relative;aspect-ratio:1.4/1;display:flex;align-items:center;justify-content:center
+}
+.course-thumb.green{background:linear-gradient(135deg,#A6CC8A 0%,#7AC74F 100%)}
+.course-thumb.peach{background:linear-gradient(135deg,#F5C29A 0%,#E89A6C 100%)}
+.course-thumb.blue{background:linear-gradient(135deg,#7FB7E8 0%,#4A8FC9 100%)}
+.course-thumb.purple{background:linear-gradient(135deg,#C8A8E0 0%,#9D7BC9 100%)}
+.course-thumb.yellow{background:linear-gradient(135deg,#F0D26C 0%,#D4A933 100%)}
+
+.play-btn{
+  width:46px;height:46px;border-radius:50%;
+  background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px)
+}
+.play-btn::after{
+  content:"";display:block;width:0;height:0;
+  border-left:14px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent;
+  margin-left:3px
+}
+.course-info{padding:10px 12px}
+.course-info .title{font-size:14px;font-weight:700;color:var(--text);line-height:1.35}
+.course-info .meta{
+  font-size:11px;color:var(--gray-600);margin-top:6px;
+  display:flex;gap:6px;align-items:center
+}
+.course-info .meta .dot{color:var(--green)}
+
+/* ============ 小基数专属：目标卡 ============ */
+.goal-card{
+  background:linear-gradient(135deg,#7AC74F 0%,#5BA838 100%);
+  border-radius:18px;padding:14px 16px;color:#fff;margin-bottom:12px;
+  display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow-sm)
+}
+.goal-card .lbl{font-size:11px;opacity:.85;letter-spacing:1px}
+.goal-card .val{font-size:20px;font-weight:800;margin-top:2px}
+.goal-card .right{text-align:right}
+.goal-card .badge{
+  background:rgba(255,255,255,.25);padding:4px 10px;border-radius:12px;
+  font-size:11px;font-weight:600;backdrop-filter:blur(4px)
+}
+
+/* ============ 强度选择 ============ */
+.intensity-bar{
+  display:flex;gap:6px;margin-bottom:12px
+}
+.intensity-bar .chip{
+  flex:1;background:#fff;border:1.5px solid var(--gray-200);
+  border-radius:20px;padding:8px 6px;text-align:center;font-size:12px;font-weight:600;
+  color:var(--gray-600);cursor:pointer;transition:all .2s
+}
+.intensity-bar .chip.on{
+  background:var(--green-light);border-color:var(--green);color:var(--green-dark)
+}
+.intensity-bar .chip small{display:block;font-size:10px;font-weight:400;opacity:.7;margin-top:2px}
+
+/* ============ 饮食打卡条 ============ */
+.diet-card{
+  background:#fff;border-radius:18px;padding:14px 16px;box-shadow:var(--shadow-sm);margin-bottom:12px
+}
+.diet-card h3{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.diet-row{
+  display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--gray-100)
+}
+.diet-row:last-child{border-bottom:none}
+.diet-row .meal{font-size:18px}
+.diet-row .info{flex:1}
+.diet-row .info .name{font-size:13px;font-weight:600}
+.diet-row .info .kcal{font-size:11px;color:var(--gray-600)}
+.diet-row .check{
+  width:22px;height:22px;border-radius:50%;border:2px solid var(--gray-200);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;color:transparent;font-size:12px
+}
+.diet-row .check.on{background:var(--green);border-color:var(--green);color:#fff}
+
+/* ============ 周计划表 ============ */
+.week-plan{
+  background:#fff;border-radius:18px;padding:14px 16px;box-shadow:var(--shadow-sm);margin-bottom:12px
+}
+.week-plan h3{font-size:14px;font-weight:700;margin-bottom:10px}
+.week-plan .row{
+  display:grid;grid-template-columns:32px 1fr auto;gap:8px;align-items:center;
+  padding:8px 0;border-bottom:1px solid var(--gray-100);font-size:12px
+}
+.week-plan .row:last-child{border-bottom:none}
+.week-plan .row .day{
+  width:28px;height:28px;border-radius:50%;background:var(--green-light);color:var(--green-dark);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px
+}
+.week-plan .row.rest .day{background:#FFE0E0;color:#D44}
+.week-plan .row .focus{font-weight:600;color:var(--text)}
+.week-plan .row .focus small{display:block;font-weight:400;color:var(--gray-600);font-size:11px}
+.week-plan .row .min{font-size:11px;color:var(--gray-600);background:var(--gray-100);padding:2px 8px;border-radius:8px}
+
+/* ============ 贴士卡 ============ */
+.tip-card{
+  background:linear-gradient(135deg,#E8F5DC 0%,#F5FBE8 100%);
+  border-radius:18px;padding:14px 16px;box-shadow:var(--shadow-sm);
+  font-size:12px;line-height:1.7;color:var(--text)
+}
+.tip-card h4{font-size:13px;font-weight:700;margin-bottom:6px;color:var(--green-dark)}
+.tip-card ul{padding-left:18px;margin:0}
+.tip-card li{margin-bottom:4px}
+
+
+/* ============ 空状态 ============ */
+.empty{
+  text-align:center;padding:30px 0;color:var(--gray-600);font-size:13px
+}
+.empty .ico{font-size:36px;margin-bottom:8px;display:block}
+
+/* ============ 状态栏（模拟手机顶部）============ */
+.statusbar{
+  position:absolute;top:0;left:0;right:0;height:54px;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  padding:0 26px 8px;font-size:14px;font-weight:600;color:#fff;
+  pointer-events:none;z-index:5
+}
+.statusbar .left{font-size:15px}
+.statusbar .right{display:flex;gap:6px;align-items:center}
+.statusbar .battery{
+  width:24px;height:11px;border:1.2px solid #fff;border-radius:3px;
+  position:relative;display:flex;align-items:center;padding:1px
+}
+.statusbar .battery::after{
+  content:"";position:absolute;right:-3px;top:3px;width:2px;height:5px;background:#fff;border-radius:0 1px 1px 0
+}
+.statusbar .battery .fill{background:#fff;height:100%;width:87%;border-radius:1px}
+
+/* ============ 其他子页面占位（点击侧边栏切换）============ */
+.subpage{display:none}
+.subpage.show{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.subpage-title{font-size:20px;font-weight:700;margin-bottom:14px;color:var(--text)}
+.subpage-card{background:#fff;border-radius:18px;padding:18px;box-shadow:var(--shadow-sm);margin-bottom:12px}
+.subpage-card h3{font-size:15px;font-weight:700;margin-bottom:10px}
+.subpage-card p{font-size:13px;color:var(--gray-600);line-height:1.7}
+.subpage-card .item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-100)}
+.subpage-card .item:last-child{border-bottom:none}
+.subpage-card .item .ico{font-size:22px}
+.subpage-card .item .txt{flex:1}
+.subpage-card .item .txt h4{font-size:13px;font-weight:600}
+.subpage-card .item .txt p{font-size:11px;color:var(--gray-600);margin:0}
+.subpage-card .item .btn-sm{
+  background:var(--green-light);color:var(--green-dark);border:none;border-radius:12px;
+  padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer
+}
+
+/* ============ 英语学习专属样式 ============ */
+/* 场景切换 */
+.eng-tabs{display:flex;gap:6px;margin-bottom:12px}
+.eng-tab{
+  flex:1;background:#fff;border:1.5px solid var(--gray-200);border-radius:20px;
+  padding:8px 4px;text-align:center;font-size:12px;font-weight:600;color:var(--gray-600);
+  cursor:pointer;transition:all .2s
+}
+.eng-tab.on{background:var(--green-light);border-color:var(--green);color:var(--green-dark)}
+
+/* 短句卡片 */
+.sentence-card{
+  background:#fff;border-radius:16px;padding:14px 16px;box-shadow:var(--shadow-sm);margin-bottom:10px;
+  border-left:4px solid var(--green)
+}
+.sentence-card .en{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.4}
+.sentence-card .cn{font-size:13px;color:var(--gray-600);margin-bottom:8px}
+.sentence-card .tags{display:flex;gap:6px;flex-wrap:wrap}
+.sentence-card .tag{
+  background:var(--gray-100);border-radius:8px;padding:3px 8px;font-size:10px;
+  color:var(--gray-600);letter-spacing:.5px
+}
+.sentence-card .tag.tip{background:var(--green-light);color:var(--green-dark)}
+
+/* 短语列表 */
+.phrase-item{
+  display:flex;align-items:flex-start;gap:10px;padding:10px 0;
+  border-bottom:1px dashed var(--gray-100)
+}
+.phrase-item:last-child{border-bottom:none}
+.phrase-item .num{
+  flex-shrink:0;width:24px;height:24px;border-radius:50%;
+  background:var(--green-light);color:var(--green-dark);display:flex;
+  align-items:center;justify-content:center;font-size:12px;font-weight:700
+}
+.phrase-item .body{flex:1}
+.phrase-item .body .eng{font-size:13px;font-weight:600;color:var(--text)}
+.phrase-item .body .chn{font-size:12px;color:var(--gray-600);margin-top:2px}
+.phrase-item .body .pron{font-size:11px;color:var(--green-dark);margin-top:1px}
+
+/* 进度环 */
+.eng-progress{
+  display:flex;align-items:center;gap:12px;background:var(--green-light);
+  border-radius:16px;padding:12px 14px;margin-bottom:14px
+}
+.eng-progress .bar-wrap{
+  flex:1;height:8px;background:rgba(255,255,255,.6);border-radius:4px;overflow:hidden
+}
+.eng-progress .bar-inner{height:100%;background:var(--green);border-radius:4px;transition:width .3s}
+.eng-progress .stats{font-size:12px;font-weight:700;color:var(--green-dark);white-space:nowrap}
+
+/* 闪卡模式 */
+.flashcard{
+  perspective:1000px;width:100%;height:160px;margin-bottom:14px;cursor:pointer
+}
+.flashcard .inner{
+  width:100%;height:100%;position:relative;transition:transform .5s;transform-style:preserve-3d
+}
+.flashcard.flipped .inner{transform:rotateY(180deg)}
+.flashcard .front,.flashcard .back{
+  position:absolute;inset:0;backface-visibility:hidden;
+  background:#fff;border-radius:18px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:20px;box-shadow:var(--shadow-sm)
+}
+.flashcard .back{transform:rotateY(180deg);background:var(--green-light)}
+.flashcard .front .en{font-size:22px;font-weight:800;color:var(--text)}
+.flashcard .front .hint{font-size:12px;color:var(--gray-600);margin-top:8px}
+.flashcard .back .cn{font-size:18px;font-weight:700;color:var(--green-dark)}
+.flashcard .back .pron{font-size:13px;color:var(--gray-600);margin-top:8px}
+.flashcard .hint-text{text-align:center;font-size:11px;color:var(--gray-600);margin-top:-6px;margin-bottom:14px}
+
+/* 发音按钮 */
+.flashcard .speak-btn{
+  position:absolute;bottom:12px;right:12px;width:36px;height:36px;
+  border-radius:50%;background:var(--green);border:none;color:#fff;font-size:16px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(122,199,79,.4);transition:all .2s
+}
+.flashcard .speak-btn:active{transform:scale(.9)}
+.flashcard .speak-btn.speaking{animation:speakPulse .5s infinite}
+@keyframes speakPulse{0%,100%{box-shadow:0 0 0 0 rgba(122,199,79,.4)}50%{box-shadow:0 0 0 12px rgba(122,199,79,0)}}
+.flashcard .front .speak-btn{bottom:10px;right:10px}
+
+/* 每日一句 */
+.daily-quote{
+  background:linear-gradient(135deg,#FFF8E1 0%,#FFECB3 100%);
+  border-radius:16px;padding:14px 16px;margin-bottom:12px;
+  border-left:4px solid #FFC107;position:relative;overflow:hidden
+}
+.daily-quote::after{content:"\"\"";position:absolute;right:12px;top:4px;font-size:40px;color:rgba(0,0,0,.06);font-weight:800}
+.daily-quote .dq-label{font-size:11px;color:#B8860B;font-weight:600;letter-spacing:1px;margin-bottom:6px}
+.daily-quote .dq-en{font-size:15px;font-weight:700;color:var(--text);line-height:1.5;position:relative;z-index:1}
+.daily-quote .dq-cn{font-size:13px;color:var(--gray-600);margin-top:4px;position:relative;z-index:1}
+.daily-quote .dq-from{font-size:11px;color:var(--gray-600);margin-top:6px;font-style:italic;position:relative;z-index:1}
+.daily-quote .dq-speak{
+  position:absolute;bottom:10px;right:14px;width:30px;height:30px;
+  border-radius:50%;background:#FFC107;border:none;color:#fff;font-size:13px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2
+}
+
+/* 短句/词汇朗读按钮 */
+.sentence-card{position:relative}
+.sentence-card .speak-mini{
+  position:absolute;top:10px;right:12px;width:28px;height:28px;
+  border-radius:50%;background:var(--green-light);border:none;color:var(--green-dark);
+  font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .2s
+}
+.sentence-card:hover .speak-mini{opacity:1}
+.phrase-item .speak-mini{
+  width:28px;height:28px;flex-shrink:0;
+  border-radius:50%;background:var(--green-light);border:none;color:var(--green-dark);
+  font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center
+}
