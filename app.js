@@ -559,7 +559,130 @@ function setupEcomStorage(){
   });
 }
 
-// ============ 工具 ============
+// ============ 经典书单 + 每日打卡 ============
+const BOOKS = [
+  { icon:'📕', title:'《原子习惯》', author:'James Clear', pages:'288页', color:'#FFE0E0' },
+  { icon:'📗', title:'《被讨厌的勇气》', author:'岸见一郎', pages:'208页', color:'#D4F5F0' },
+  { icon:'📙', title:'《思考，快与慢》', author:'Daniel Kahneman', pages:'512页', color:'#FFF3E0' },
+  { icon:'📘', title:'《非暴力沟通》', author:'Marshall Rosenberg', pages:'244页', color:'#E8E4FF' },
+  { icon:'📓', title:'《刻意练习》', author:'Anders Ericsson', pages:'304页', color:'#F5E6F0' },
+  { icon:'📔', title:'《心流》', author:'Mihaly Csikszentmihalyi', pages:'320页', color:'#E8F5DC' },
+];
+
+function renderBooks(){
+  const key = 'book_progress';
+  let progress = {};
+  try{ progress = JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){}
+
+  $('#bookList').innerHTML = '<h3>📚 今日阅读（点击✓打卡）</h3>' +
+    BOOKS.map((b,i)=>{
+      const pct = progress[i] || 0;
+      const done = pct >= 100;
+      return '<div class="book-card">'+
+        '<div class="cover" style="background:'+b.color+'">'+b.icon+'</div>'+
+        '<div class="info">'+
+          '<div class="title">'+b.title+'</div>'+
+          '<div class="author">'+b.author+'</div>'+
+          '<div class="pages">'+b.pages+'</div>'+
+          '<div class="progress-bar"><div class="fill" style="width:'+pct+'%"></div></div>'+
+          '<div style="font-size:10px;color:var(--gray-600);margin-top:2px">'+(done?'✅ 已读完':'今日进度 '+pct+'%')+'</div>'+
+        '</div>'+
+        '<div class="check-btn'+(done?' done':'')+'" data-bidx="'+i+'">'+(done?'✓':'')+'</div>'+
+      '</div>';
+    }).join('');
+
+  $$('#bookList .check-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const i = parseInt(btn.dataset.bidx);
+      if(progress[i] >= 100){ progress[i] = 0; }
+      else { progress[i] = Math.min(100, (progress[i]||0) + 25); }
+      localStorage.setItem(key, JSON.stringify(progress));
+      renderBooks();
+    });
+  });
+
+  const savedNote = localStorage.getItem('reading_note')||'';
+  const noteEl = document.getElementById('readingNote');
+  if(noteEl && !noteEl.dataset.loaded){ noteEl.value = savedNote; noteEl.dataset.loaded = '1'; }
+}
+
+// ============ 电商视频 ============
+const ECOM_VIDEOS = [
+  { icon:'📊', title:'选品分析 · 蓝海词挖掘', dur:'15分钟', color:'#FFF3E0' },
+  { icon:'📸', title:'主图设计 · 视觉营销', dur:'12分钟', color:'#FFE0E0' },
+  { icon:'📝', title:'详情页文案 · FAB法则', dur:'10分钟', color:'#D4F5F0' },
+  { icon:'📈', title:'直通车投放 · ROI优化', dur:'20分钟', color:'#E8E4FF' },
+  { icon:'🛍️', title:'店铺装修 · 提高转化率', dur:'18分钟', color:'#F5E6F0' },
+  { icon:'💬', title:'客服话术 · 询单转化', dur:'8分钟', color:'#E8F5DC' },
+];
+
+function renderEcom(){
+  const key = 'ecom_progress';
+  let done = {};
+  try{ done = JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){}
+
+  $('#ecomList').innerHTML = '<h3>🎬 学习视频（点🔗跳转+打卡）</h3>' +
+    ECOM_VIDEOS.map((v,i)=>{
+      const isDone = done[i];
+      const searchQuery = encodeURIComponent('电商 '+v.title.split('·')[0]);
+      return '<div class="video-card">'+
+        '<div class="thumb" style="background:'+v.color+'">'+v.icon+'</div>'+
+        '<div class="info">'+
+          '<div class="vtitle">'+(isDone?'✅ ':'')+v.title+'</div>'+
+          '<div class="dur">⏱ '+v.dur+'</div>'+
+        '</div>'+
+        '<a class="play-icon" href="https://www.bilibili.com/search?keyword='+searchQuery+'" target="_blank" rel="noopener" data-vidx="'+i+'">🔗</a>'+
+      '</div>';
+    }).join('');
+
+  $$('#ecomList .play-icon').forEach(link=>{
+    link.addEventListener('click',()=>{
+      const i = parseInt(link.dataset.vidx);
+      done[i] = true;
+      localStorage.setItem(key, JSON.stringify(done));
+      setTimeout(()=>renderEcom(), 500);
+    });
+  });
+}
+
+// ============ 穿搭交互 ============
+function setupOutfit(){
+  const key = 'outfit_today';
+  const dateKey = new Date().toISOString().slice(0,10);
+  let data = {};
+  try{ data = JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){}
+
+  if(data[dateKey]){
+    if(data[dateKey].top) document.getElementById('outfitTop').textContent = data[dateKey].top;
+    if(data[dateKey].bottom) document.getElementById('outfitBottom').textContent = data[dateKey].bottom;
+    if(data[dateKey].shoes) document.getElementById('outfitShoes').textContent = data[dateKey].shoes;
+    if(data[dateKey].accessory) document.getElementById('outfitAcc').textContent = data[dateKey].accessory;
+  }
+
+  const presets = {
+    top: ['白色T恤','黑色卫衣','条纹衬衫','针织开衫','西装外套','碎花上衣'],
+    bottom: ['直筒牛仔裤','黑色阔腿裤','A字裙','瑜伽裤','西裤','百褶裙'],
+    shoes: ['白色运动鞋','黑色乐福鞋','帆布鞋','马丁靴','尖头单鞋','老爹鞋'],
+    accessory: ['帆布包','金属项链','珍珠耳环','丝巾','手表','墨镜'],
+  };
+
+  $$('.outfit-slot').forEach(slot=>{
+    slot.addEventListener('click',()=>{
+      const type = slot.dataset.type;
+      const list = presets[type] || [];
+      const choice = prompt(type+'：\n'+list.map((x,i)=>(i+1)+'. '+x).join('\n'));
+      if(choice){
+        const val = list[parseInt(choice)-1] || choice;
+        const cap = type.charAt(0).toUpperCase()+type.slice(1);
+        const el = document.getElementById('outfit'+cap);
+        if(el) el.textContent = val;
+        if(!data[dateKey]) data[dateKey] = {};
+        data[dateKey][type] = val;
+        localStorage.setItem(key, JSON.stringify(data));
+      }
+    });
+  });
+}
 const $ = (s)=>document.querySelector(s);
 const $$ = (s)=>document.querySelectorAll(s);
 
@@ -581,8 +704,21 @@ function init(){
   loadEngLearned();
   renderEngContent();
   renderDailyQuote();
+  renderBooks();
+  renderEcom();
+  setupOutfit();
   $('#btnStart').addEventListener('click', toggleTimer);
   $('#btnReset').addEventListener('click', resetTimer);
+
+  // 读书笔记保存
+  const saveNoteBtn = document.getElementById('saveNoteBtn');
+  if(saveNoteBtn){
+    saveNoteBtn.addEventListener('click',()=>{
+      const note = document.getElementById('readingNote').value;
+      localStorage.setItem('reading_note', note);
+      alert('笔记已保存 ✅');
+    });
+  }
 
   // 心情按钮交互 + 持久化
   $$('.mood-btn').forEach(btn=>{

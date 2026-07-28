@@ -139,41 +139,44 @@
 
       <!-- 读书记录 -->
       <section class="subpage" data-page="reading">
-        <h2 class="subpage-title">📖 读书记录</h2>
-        <div class="subpage-card">
-          <h3>在读书目</h3>
-          <div class="item"><span class="ico">📕</span><div class="txt"><h4>《原子习惯》</h4><p>已读 72% · 第 5 章</p></div><button class="btn-sm">继续</button></div>
-          <div class="item"><span class="ico">📗</span><div class="txt"><h4>《被讨厌的勇气》</h4><p>已读 45% · 第 3 章</p></div><button class="btn-sm">继续</button></div>
-          <div class="item"><span class="ico">📙</span><div class="txt"><h4>《思考，快与慢》</h4><p>已读 20% · 第 2 章</p></div><button class="btn-sm">继续</button></div>
-        </div>
+        <h2 class="subpage-title">📖 经典书单 · 每日阅读打卡</h2>
+        <div class="subpage-card" id="bookList"></div>
         <div class="subpage-card" style="margin-top:10px">
-          <h3>读书笔记</h3>
-          <textarea placeholder="今天读到的精彩内容…" style="width:100%;min-height:80px;padding:10px;border-radius:12px;border:1px solid #ddd;font-size:13px;resize:none;outline:none"></textarea>
+          <h3>📝 读书笔记</h3>
+          <textarea id="readingNote" placeholder="今天读到的好句子或感悟…" style="width:100%;min-height:80px;padding:10px;border-radius:12px;border:1px solid #ddd;font-size:13px;resize:none;outline:none"></textarea>
+          <button class="btn-sm" id="saveNoteBtn" style="margin-top:8px;background:var(--green);color:#fff;padding:8px 16px">保存笔记</button>
         </div>
       </section>
 
       <!-- 亲子启蒙 -->
       <section class="subpage" data-page="kids">
-        <h2 class="subpage-title">👶 亲子启蒙</h2>
+        <h2 class="subpage-title">👶 亲子启蒙（3-6岁）</h2>
         <div class="subpage-card">
-          <h3>启蒙主题</h3>
-          <div class="item"><span class="ico">🎨</span><div class="txt"><h4>艺术启蒙</h4><p>绘画、手工、色彩认知</p></div><button class="btn-sm done-btn">开始</button></div>
-          <div class="item"><span class="ico">🎵</span><div class="txt"><h4>音乐启蒙</h4><p>儿歌、节奏、乐器体验</p></div><button class="btn-sm done-btn">开始</button></div>
-          <div class="item"><span class="ico">🔤</span><div class="txt"><h4>语言启蒙</h4><p>绘本共读、识字游戏</p></div><button class="btn-sm done-btn">开始</button></div>
-          <div class="item"><span class="ico">🧩</span><div class="txt"><h4>逻辑思维</h4><p>拼图、分类、推理</p></div><button class="btn-sm done-btn">开始</button></div>
+          <h3>📋 今日启蒙任务</h3>
+          <div class="item"><span class="ico">📖</span><div class="txt"><h4>绘本共读 15 分钟</h4><p>选一本绘本，一起指读</p></div><button class="btn-sm done-btn">完成</button></div>
+          <div class="item"><span class="ico">🔤</span><div class="txt"><h4>识字游戏</h4><p>认 3 个新汉字 + 复习旧字</p></div><button class="btn-sm done-btn">完成</button></div>
+          <div class="item"><span class="ico">🔢</span><div class="txt"><h4>数感启蒙</h4><p>数数、比大小、简单加减</p></div><button class="btn-sm done-btn">完成</button></div>
+          <div class="item"><span class="ico">🎨</span><div class="txt"><h4>创意手工/画画</h4><p>涂色、剪纸、橡皮泥</p></div><button class="btn-sm done-btn">完成</button></div>
+        </div>
+        <div class="subpage-card" style="margin-top:10px">
+          <h3>📚 推荐绘本</h3>
+          <div class="item"><span class="ico">🐛</span><div class="txt"><h4>《好饿的毛毛虫》</h4><p>认识食物、星期、数字</p></div></div>
+          <div class="item"><span class="ico">🐰</span><div class="txt"><h4>《猜猜我有多爱你》</h4><p>表达爱的经典绘本</p></div></div>
+          <div class="item"><span class="ico">🏠</span><div class="txt"><h4>《爷爷一定有办法》</h4><p>创造力与亲情</p></div></div>
+          <div class="item"><span class="ico">🌈</span><div class="txt"><h4>《彩虹色的花》</h4><p>分享与生命循环</p></div></div>
+        </div>
+        <div class="subpage-card" style="margin-top:10px">
+          <h3>🎵 磨耳朵儿歌</h3>
+          <div class="item"><span class="ico">🎶</span><div class="txt"><h4>Twinkle Twinkle Little Star</h4><p>经典英语启蒙儿歌</p></div></div>
+          <div class="item"><span class="ico">🎶</span><div class="txt"><h4>《小星星》</h4><p>中文经典童谣</p></div></div>
+          <div class="item"><span class="ico">🎶</span><div class="txt"><h4>Baby Shark</h4><p>动作儿歌，边唱边跳</p></div></div>
         </div>
       </section>
 
       <!-- 电商学习 -->
       <section class="subpage" data-page="ecom">
         <h2 class="subpage-title">🛒 电商学习</h2>
-        <div class="subpage-card">
-          <h3>今日课题</h3>
-          <div class="item"><span class="ico">📊</span><div class="txt"><h4>选品分析</h4><p>市场调研 · 蓝海词挖掘</p></div><button class="btn-sm done-btn">学习</button></div>
-          <div class="item"><span class="ico">📸</span><div class="txt"><h4>主图设计</h4><p>视觉营销 · 卖点提炼</p></div><button class="btn-sm done-btn">学习</button></div>
-          <div class="item"><span class="ico">📝</span><div class="txt"><h4>详情页文案</h4><p>痛点场景 · FAB 法则</p></div><button class="btn-sm done-btn">学习</button></div>
-          <div class="item"><span class="ico">📈</span><div class="txt"><h4>直通车投放</h4><p>关键词出价 · ROI 优化</p></div><button class="btn-sm done-btn">学习</button></div>
-        </div>
+        <div class="subpage-card" id="ecomList"></div>
       </section>
 
       <!-- 心情 -->
@@ -196,13 +199,31 @@
 
       <!-- 每日穿搭 -->
       <section class="subpage" data-page="outfit">
-        <h2 class="subpage-title">👔 每日穿搭</h2>
-        <div class="subpage-card">
-          <p style="margin-bottom:12px;color:var(--gray-600);font-size:13px">记录今天的穿搭，给自己一份仪式感 ✨</p>
-          <div class="item"><span class="ico">👕</span><div class="txt"><h4>上衣</h4><p>输入今日上衣</p></div></div>
-          <div class="item"><span class="ico">👖</span><div class="txt"><h4>下装</h4><p>输入今日下装</p></div></div>
-          <div class="item"><span class="ico">👟</span><div class="txt"><h4>鞋子</h4><p>输入今日鞋子</p></div></div>
-          <div class="item"><span class="ico">💍</span><div class="txt"><h4>配饰</h4><p>包包、首饰等</p></div></div>
+        <h2 class="subpage-title">👔 每日穿搭记录</h2>
+        <div class="outfit-grid">
+          <div class="outfit-slot" data-type="top">
+            <div class="icon">👕</div><div class="label">上衣</div>
+            <div class="val" id="outfitTop">点击选择</div>
+          </div>
+          <div class="outfit-slot" data-type="bottom">
+            <div class="icon">👖</div><div class="label">下装</div>
+            <div class="val" id="outfitBottom">点击选择</div>
+          </div>
+          <div class="outfit-slot" data-type="shoes">
+            <div class="icon">👟</div><div class="label">鞋子</div>
+            <div class="val" id="outfitShoes">点击选择</div>
+          </div>
+          <div class="outfit-slot" data-type="accessory">
+            <div class="icon">💍</div><div class="label">配饰</div>
+            <div class="val" id="outfitAcc">点击选择</div>
+          </div>
+        </div>
+        <div class="subpage-card" style="margin-top:10px">
+          <h3>💡 穿搭灵感</h3>
+          <div class="item"><span class="ico">☀️</span><div class="txt"><h4>通勤简约风</h4><p>白衬衫 + 直筒西裤 + 乐福鞋</p></div></div>
+          <div class="item"><span class="ico">🌿</span><div class="txt"><h4>休闲运动风</h4><p>卫衣 + 瑜伽裤 + 运动鞋</p></div></div>
+          <div class="item"><span class="ico">🌸</span><div class="txt"><h4>温柔韩系风</h4><p>针织开衫 + 碎花裙 + 小白鞋</p></div></div>
+          <div class="item"><span class="ico">🌙</span><div class="txt"><h4>气质轻熟风</h4><p>西装外套 + 吊带裙 + 尖头鞋</p></div></div>
         </div>
       </section>
 

@@ -15,14 +15,18 @@
   --shadow-md:0 4px 16px rgba(0,0,0,.08);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:#2C2C2C;line-height:1.5}
+html,body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:#F7F5F0;line-height:1.5;margin:0;padding:0;width:100%;overflow-x:hidden}
 body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
 
-/* 整个设备框 - 手机外壳 */
+/* 整个应用容器 */
 .app-wrap{
-  width:100vw;min-height:100vh;background:#F7F5F0;
-  display:flex;position:relative;overflow:hidden
+  width:100%;min-height:100vh;min-height:100dvh;background:#F7F5F0;
+  display:flex;flex-direction:column
 }
+.main{
+  flex:1;padding:12px 14px 24px;overflow-y:auto;background:linear-gradient(180deg,#F7F5F0 0%,#EFEDE6 100%)
+}
+.main::-webkit-scrollbar{display:none}
 
 /* 顶部导航标签 */
 .top-nav{
@@ -74,13 +78,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .nav-item{position:relative}
 .nav-item .lbl{white-space:nowrap;font-size:11px}
 
-/* ============ 主内容区 ============ */
-.main{
-  flex:1;background:linear-gradient(180deg,#F7F5F0 0%,#EFEDE6 100%);
-  padding:60px 16px 24px;overflow-y:auto;position:relative;
-  border-radius:40px 0 0 40px
-}
-.main::-webkit-scrollbar{display:none}
+/* ============ 主内容区（已在顶部定义）============ */
 
 /* ============ 日期选择 ============ */
 .date-strip{
@@ -406,3 +404,59 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
   border-radius:50%;background:var(--green-light);border:none;color:var(--green-dark);
   font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center
 }
+
+/* ============ 读书打卡 ============ */
+.book-card{
+  display:flex;gap:12px;background:#fff;border-radius:16px;padding:14px;
+  box-shadow:var(--shadow-sm);margin-bottom:10px;align-items:center
+}
+.book-card .cover{
+  width:52px;height:72px;border-radius:8px;display:flex;align-items:center;
+  justify-content:center;font-size:28px;flex-shrink:0
+}
+.book-card .info{flex:1;min-width:0}
+.book-card .info .title{font-size:14px;font-weight:700;color:var(--text)}
+.book-card .info .author{font-size:12px;color:var(--gray-600);margin:2px 0}
+.book-card .info .pages{font-size:11px;color:var(--gray-600)}
+.book-card .info .progress-bar{
+  height:4px;background:var(--gray-100);border-radius:2px;margin-top:6px;overflow:hidden
+}
+.book-card .info .progress-bar .fill{
+  height:100%;background:var(--green);border-radius:2px;transition:width .3s
+}
+.book-card .check-btn{
+  width:32px;height:32px;border-radius:50%;border:2px solid var(--gray-200);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;
+  font-size:14px;color:transparent;background:#fff;transition:all .2s
+}
+.book-card .check-btn.done{background:var(--green);border-color:var(--green);color:#fff}
+
+/* 视频学习卡片 */
+.video-card{
+  display:flex;gap:10px;background:#fff;border-radius:14px;padding:10px 12px;
+  box-shadow:var(--shadow-sm);margin-bottom:8px;align-items:center
+}
+.video-card .thumb{
+  width:72px;height:48px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:18px
+}
+.video-card .info{flex:1;min-width:0}
+.video-card .info .vtitle{font-size:13px;font-weight:600;line-height:1.3}
+.video-card .info .dur{font-size:11px;color:var(--gray-600);margin-top:2px}
+.video-card .play-icon{
+  width:28px;height:28px;border-radius:50%;background:var(--green-light);
+  display:flex;align-items:center;justify-content:center;color:var(--green-dark);
+  font-size:12px;flex-shrink:0;cursor:pointer
+}
+
+/* 穿搭记录 */
+.outfit-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px
+}
+.outfit-slot{
+  background:#fff;border-radius:14px;padding:12px;text-align:center;
+  box-shadow:var(--shadow-sm);cursor:pointer
+}
+.outfit-slot .icon{font-size:28px;margin-bottom:4px}
+.outfit-slot .label{font-size:11px;color:var(--gray-600)}
+.outfit-slot .val{font-size:13px;font-weight:600;color:var(--text);margin-top:2px}
