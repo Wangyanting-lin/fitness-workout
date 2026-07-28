@@ -475,16 +475,86 @@ function renderCourses(){
   `).join('');
 }
 
-// ============ 侧边栏导航 ============
+// ============ 顶部标签导航 ============
 function setupNav(){
-  $$('.nav-item').forEach(item=>{
+  $$('.tn-item').forEach(item=>{
     item.addEventListener('click',()=>{
       const page = item.dataset.page;
-      $$('.nav-item').forEach(x=>x.classList.remove('active'));
+      // 切换标签激活态
+      $$('.tn-item').forEach(x=>x.classList.remove('active'));
       item.classList.add('active');
+      // 切换子页面
       $$('.subpage').forEach(sp=>sp.classList.remove('show'));
       const target = $(`.subpage[data-page="${page}"]`);
       if(target) target.classList.add('show');
+    });
+  });
+}
+
+// ============ 子页面通用打卡按钮 ============
+function setupDoneBtns(){
+  $$('.done-btn').forEach(btn=>{
+    btn.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      btn.classList.toggle('on');
+      if(btn.classList.contains('on')){
+        btn.textContent = '✅';
+        btn.style.background = 'var(--green)';
+        btn.style.color = '#fff';
+      } else {
+        btn.textContent = btn.dataset.origText || '完成';
+        btn.style.background = '';
+        btn.style.color = '';
+      }
+      // 保存初始文字
+      if(!btn.dataset.origText){
+        btn.dataset.origText = btn.textContent === '✅' ? '完成' : btn.textContent;
+      }
+    });
+  });
+}
+
+// ============ 每日计划数据持久化 ============
+function setupPlanStorage(){
+  const key = 'plan_tasks';
+  let tasks = {};
+  try{ tasks = JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){}
+  
+  $$('[data-page="plan"] .done-btn').forEach((btn,i)=>{
+    if(tasks[i]){ btn.click(); btn.classList.add('on'); btn.textContent='✅'; btn.style.background='var(--green)'; btn.style.color='#fff'; }
+    btn.addEventListener('click',()=>{
+      tasks[i] = btn.classList.contains('on');
+      localStorage.setItem(key, JSON.stringify(tasks));
+    });
+  });
+}
+
+// ============ 亲子启蒙打卡持久化 ============
+function setupKidsStorage(){
+  const key = 'kids_tasks';
+  let tasks = {};
+  try{ tasks = JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){}
+  
+  $$('[data-page="kids"] .done-btn').forEach((btn,i)=>{
+    if(tasks[i]){ btn.click(); btn.classList.add('on'); btn.textContent='✅'; btn.style.background='var(--green)'; btn.style.color='#fff'; }
+    btn.addEventListener('click',()=>{
+      tasks[i] = btn.classList.contains('on');
+      localStorage.setItem(key, JSON.stringify(tasks));
+    });
+  });
+}
+
+// ============ 电商学习打卡持久化 ============
+function setupEcomStorage(){
+  const key = 'ecom_tasks';
+  let tasks = {};
+  try{ tasks = JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){}
+  
+  $$('[data-page="ecom"] .done-btn').forEach((btn,i)=>{
+    if(tasks[i]){ btn.click(); btn.classList.add('on'); btn.textContent='✅'; btn.style.background='var(--green)'; btn.style.color='#fff'; }
+    btn.addEventListener('click',()=>{
+      tasks[i] = btn.classList.contains('on');
+      localStorage.setItem(key, JSON.stringify(tasks));
     });
   });
 }
@@ -500,6 +570,10 @@ function init(){
   renderTimer();
   renderWeekPlan();
   setupNav();
+  setupDoneBtns();
+  setupPlanStorage();
+  setupKidsStorage();
+  setupEcomStorage();
   setupDietCheck();
   setupIntensity();
   setupEngTabs();
@@ -510,13 +584,19 @@ function init(){
   $('#btnStart').addEventListener('click', toggleTimer);
   $('#btnReset').addEventListener('click', resetTimer);
 
-  // 心情按钮交互
+  // 心情按钮交互 + 持久化
   $$('.mood-btn').forEach(btn=>{
     btn.addEventListener('click',()=>{
       $$('.mood-btn').forEach(b=>b.style.transform='');
       btn.style.transform='scale(1.4)';
+      localStorage.setItem('mood_today', btn.dataset.mood);
     });
   });
+  const savedMood = localStorage.getItem('mood_today');
+  if(savedMood){
+    const btn = document.querySelector(`.mood-btn[data-mood="${savedMood}"]`);
+    if(btn) btn.style.transform = 'scale(1.4)';
+  }
 }
 
 document.addEventListener('DOMContentLoaded', init);

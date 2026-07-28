@@ -19,19 +19,30 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft 
 body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
 
 /* 整个设备框 - 手机外壳 */
-.phone-frame{
-  width:390px;height:844px;margin:24px auto;background:#F7F5F0;
-  border-radius:54px;overflow:hidden;position:relative;
-  box-shadow:0 20px 60px rgba(0,0,0,.45), inset 0 0 0 4px #1a1a1a;
-  display:flex;
+.app-wrap{
+  width:100vw;min-height:100vh;background:#F7F5F0;
+  display:flex;position:relative;overflow:hidden
 }
 
-/* ============ 左侧栏 ============ */
-.sidebar{
-  width:88px;flex-shrink:0;background:transparent;
-  display:flex;flex-direction:column;align-items:center;
-  padding:60px 0 20px;position:relative;z-index:2
+/* 顶部导航标签 */
+.top-nav{
+  display:flex;gap:4px;padding:10px 12px;background:#fff;
+  overflow-x:auto;white-space:nowrap;border-bottom:1px solid var(--gray-100);
+  position:sticky;top:0;z-index:50;-webkit-overflow-scrolling:touch
 }
+.top-nav::-webkit-scrollbar{display:none}
+.tn-item{
+  flex-shrink:0;background:none;border:1.5px solid var(--gray-200);
+  border-radius:20px;padding:7px 14px;font-size:12px;font-weight:600;
+  color:var(--gray-600);cursor:pointer;transition:all .2s;white-space:nowrap
+}
+.tn-item.active{background:var(--green);border-color:var(--green);color:#fff}
+
+/* 打卡按钮激活态 */
+.done-btn.on{background:var(--green)!important;color:#fff!important;border-color:var(--green)!important}
+
+/* 旧的左侧栏（废弃）*/
+.sidebar,.back-btn,.time-display,.nav-list,.nav-item,.statusbar{display:none}
 .back-btn{
   position:absolute;left:14px;top:64px;
   font-size:22px;color:var(--text);background:none;border:none;cursor:pointer;
