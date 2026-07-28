@@ -62,138 +62,441 @@ function renderWeekPlan(){
   $('#weekPlan').innerHTML='<h3>📅 本周训练</h3>'+WEEK_PLAN.map(function(d){return '<div class="row'+(d.rest?' rest':'')+'"><div class="day">'+d.day+'</div><div class="focus">'+d.focus+'<small>'+d.detail+'</small></div><div class="min">'+d.min+'</div></div>';}).join('');
 }
 
-function renderOutfit(){
-  var key='outfit_today',dateKey=new Date().toISOString().slice(0,10);
-  var data={};try{data=JSON.parse(localStorage.getItem(key)||'{}');}catch(e){}
-  var current=data[dateKey]||{};
-  var slots=[{type:'top',icon:'👚',label:'上衣',val:current.top||'点击选择'},{type:'bottom',icon:'👖',label:'下装',val:current.bottom||'点击选择'},{type:'shoes',icon:'👠',label:'鞋子',val:current.shoes||'点击选择'},{type:'accessory',icon:'👜',label:'配饰',val:current.accessory||'点击选择'}];
-  var h='';
-  for(var i=0;i<slots.length;i++){var s=slots[i];h+='<div class="outfit-slot" data-type="'+s.type+'"><div class="icon">'+s.icon+'</div><div class="label">'+s.label+'</div><div class="val">'+s.val+'</div></div>';}
-  $('#outfitGrid').innerHTML=h;
-  var presets={top:['白色T恤','黑色修身针织衫','条纹衬衫','短款牛仔外套','V领开衫','碎花雪纺衫'],bottom:['高腰直筒牛仔裤','黑色烟管裤','A字短裙','垂感阔腿裤','九分西裤','百褶半身裙'],shoes:['厚底小白鞋','尖头猫跟鞋','帆布鞋','方头乐福鞋','细带凉鞋','马丁靴'],accessory:['链条斜挎包','金属耳环','细腰带','丝巾','珍珠项链','手表']};
-  $$('.outfit-slot').forEach(function(slot){slot.addEventListener('click',function(){var type=slot.dataset.type;var list=presets[type]||[];var msg=list.map(function(x,i){return (i+1)+'. '+x;}).join('\n');var choice=prompt('选择:\n'+msg+'\n\n或直接输入');if(choice){var val=list[parseInt(choice)-1]||choice;slot.querySelector('.val').textContent=val;if(!data[dateKey])data[dateKey]={};data[dateKey][type]=val;localStorage.setItem(key,JSON.stringify(data));}});});
-  var videos=[{icon:'🎬',title:'158cm·韩系温柔风',style:'针织+半裙+猫跟鞋',color:'#FFE0EB'},{icon:'🎬',title:'158cm·通勤显高',style:'西装+高腰裤+尖头鞋',color:'#E0F0FF'},{icon:'🎬',title:'158cm·休闲运动',style:'短卫衣+瑜伽裤+老爹鞋',color:'#FFF3E0'},{icon:'🎬',title:'158cm·甜酷风',style:'短上衣+工装裤+马丁靴',color:'#F0E8FF'},{icon:'🎬',title:'158cm·法式慵懒',style:'衬衫+直筒裤+乐福鞋',color:'#E8F5DC'},{icon:'🎬',title:'158cm·约会甜美',style:'碎花裙+开衫+细带鞋',color:'#FFF0F5'}];
-  var vh='';
-  for(var j=0;j<videos.length;j++){var v=videos[j];vh+='<div class="video-row"><div class="thumb" style="background:'+v.color+'">'+v.icon+'</div><div class="info"><div class="vtitle">'+v.title+'</div><div class="style">'+v.style+'</div></div></div>';}
-  $('#outfitVideos').innerHTML=vh;
-  var styles=[{name:'韩系温柔',color:'#FF6B9D'},{name:'通勤显高',color:'#5B9BD5'},{name:'休闲运动',color:'#FF8C42'},{name:'甜酷街头',color:'#9B7ED8'},{name:'法式慵懒',color:'#7AC74F'},{name:'约会甜美',color:'#FF85A2'},{name:'极简高级',color:'#6B6B6B'},{name:'复古文艺',color:'#D4A853'}];
-  var sh='';
-  for(var k=0;k<styles.length;k++){var st=styles[k];sh+='<div class="style-tag" style="background:'+st.color+'">'+st.name+'</div>';}
-  $('#styleInspo').innerHTML='<div class="style-tags">'+sh+'</div>';
-}
 // ============ 英语学习 ============
-const ENG_DATA={daily:{sentences:[{en:"How's your day going?",cn:'今天过得怎么样？',pron:'/haʊz jər deɪ ˈɡoʊɪŋ/'},{en:"I'll get back to you soon.",cn:'我很快回复你。',pron:'/aɪl ɡɛt bæk tə ju sun/'},{en:"That sounds like a plan!",cn:'这个主意不错！',pron:'/ðæt saʊndz laɪk ə plæn/'},{en:"No worries, take your time.",cn:'没事，慢慢来。',pron:'/noʊ ˈwʌriz teɪk jər taɪm/'},{en:"Let me think about it.",cn:'让我考虑一下。',pron:'/lɛt mi θɪŋk əˈbaʊt ɪt/'},{en:"What do you recommend?",cn:'你有什么推荐？',pron:'/wʌt du jʊ ˌrɛkəˈmɛnd/'},{en:"Could you do me a favor?",cn:'能帮我一个忙吗？',pron:'/kʊd ju du mi ə ˈfeɪvər/'},{en:"I really appreciate it!",cn:'非常感谢！',pron:'/aɪ ˈrɪli əˈpriːʃieɪt ɪt/'}],words:[{en:'recommend',cn:'推荐',pron:'/ˌrɛkəˈmɛnd/'},{en:'appreciate',cn:'感激',pron:'/əˈpriːʃieɪt/'},{en:'absolutely',cn:'绝对地',pron:'/ˌæbsəˈluːtli/'},{en:'definitely',cn:'肯定地',pron:'/ˈdɛfɪnətli/'}]},travel:{sentences:[{en:"Where is the nearest subway station?",cn:'最近的地铁站在哪里？',pron:'/wɛr ɪz ðə ˈnɪrɪst ˈsʌbweɪ ˈsteɪʃən/'},{en:"Could I have the menu, please?",cn:'请给我看一下菜单。',pron:'/kʊd aɪ hæv ðə ˈmɛnju pliz/'},{en:"How much does this cost?",cn:'这个多少钱？',pron:'/haʊ mʌtʃ dʌz ðɪs kɔst/'},{en:"Can I get a taxi to the airport?",cn:'能打一辆去机场的出租车吗？',pron:'/kæn aɪ ɡɛt ə ˈtæksi tə ði ˈɛrpɔrt/'},{en:"Is there a pharmacy nearby?",cn:'附近有药店吗？',pron:'/ɪz ðɛr ə ˈfɑrməsi ˈnɪrbaɪ/'},{en:"I'd like to check in, please.",cn:'我想办理入住。',pron:'/aɪd laɪk tə tʃɛk ɪn pliz/'},{en:"What time is breakfast served?",cn:'早餐几点供应？',pron:'/wʌt taɪm ɪz ˈbrɛkfəst sɜrvd/'},{en:"Could you take a photo for me?",cn:'能帮我拍张照片吗？',pron:'/kʊd ju teɪk ə ˈfoʊtoʊ fər mi/'}],words:[{en:'reservation',cn:'预订',pron:'/ˌrɛzərˈveɪʃən/'},{en:'departure',cn:'出发',pron:'/dɪˈpɑrtʃər/'},{en:'luggage',cn:'行李',pron:'/ˈlʌɡɪdʒ/'},{en:'currency',cn:'货币',pron:'/ˈkʌrənsi/'}]},bags:{sentences:[{en:"This bag is made of genuine leather.",cn:'这款包是真皮材质。',pron:'/ðɪs bæɡ ɪz meɪd əv ˈdʒɛnjʊɪn ˈlɛðər/'},{en:"What's the size of this handbag?",cn:'这款手提包尺寸多大？',pron:'/wʌts ðə saɪz əv ðɪs ˈhændbæɡ/'},{en:"We offer free shipping worldwide.",cn:'我们提供全球免费配送。',pron:'/wi ˈɔfər fri ˈʃɪpɪŋ ˈwɜrldwaɪd/'},{en:"The shoulder strap is adjustable.",cn:'肩带可以调节。',pron:'/ðə ˈʃoʊldər stræp ɪz əˈdʒʌstəbl/'},{en:"This tote bag has a large capacity.",cn:'这款托特包容积很大。',pron:'/ðɪs toʊt bæɡ hæz ə lɑrdʒ kəˈpæsəti/'},{en:"It comes with a dust bag and gift box.",cn:'附带防尘袋和礼盒包装。',pron:'/ɪt kʌmz wɪð ə dʌst bæɡ ænd ɡɪft bɑks/'},{en:"How many colors are available?",cn:'有多少种颜色可选？',pron:'/haʊ ˈmɛni ˈkʌlərz ɑr əˈveɪləbl/'},{en:"The hardware is gold-plated.",cn:'五金件是镀金不锈钢的。',pron:'/ðə ˈhɑrdwɛr ɪz ɡoʊld ˈpleɪtɪd/'},{en:"This style is our bestseller.",cn:'这款是我们本季热卖款。',pron:'/ðɪs staɪl ɪz aʊr ˈbɛstˌsɛlər/'},{en:"We use YKK zippers.",cn:'我们所有包都用YKK拉链。',pron:'/wi juz YKK ˈzɪpərz/'}],words:[{en:'genuine leather',cn:'真皮',pron:'/ˈdʒɛnjʊɪn ˈlɛðər/'},{en:'adjustable',cn:'可调节的',pron:'/əˈdʒʌstəbl/'},{en:'capacity',cn:'容量',pron:'/kəˈpæsəti/'},{en:'hardware',cn:'五金件',pron:'/ˈhɑrdwɛr/'},{en:'crossbody',cn:'斜挎包',pron:'/ˈkrɔsbɑdi/'},{en:'backpack',cn:'双肩背包',pron:'/ˈbækpæk/'},{en:'tote bag',cn:'托特包',pron:'/toʊt bæɡ/'},{en:'zipper',cn:'拉链',pron:'/ˈzɪpər/'},{en:'lining',cn:'内衬',pron:'/ˈlaɪnɪŋ/'},{en:'stitching',cn:'缝线',pron:'/ˈstɪtʃɪŋ/'},{en:'bestseller',cn:'热卖款',pron:'/ˈbɛstˌsɛlər/'},{en:'wholesale price',cn:'批发价',pron:'/ˈhoʊlˌseɪl praɪs/'}]}};
-let engScene='daily',engLearned={},fcIdx=0;
-function loadEngLearned(){try{engLearned=JSON.parse(localStorage.getItem('eng_learned_'+engScene)||'{}');}catch(e){engLearned={};}}
-function saveEngLearned(){localStorage.setItem('eng_learned_'+engScene,JSON.stringify(engLearned));}
-function speakText(text){if(!window.speechSynthesis)return;window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=0.85;var voices=speechSynthesis.getVoices();var ev=voices.find(function(v){return v.lang==='en-US';});if(ev)u.voice=ev;window.speechSynthesis.speak(u);}
-function updateFlashcard(){var data=ENG_DATA[engScene];if(!data.sentences.length)return;var s=data.sentences[fcIdx%data.sentences.length];$('#fcEn').textContent=s.en;$('#fcCn').textContent=s.cn;$('#fcPron').textContent=s.pron;document.getElementById('flashcard').classList.remove('flipped');}
-function renderEngContent(){
-  var data=ENG_DATA[engScene],total=data.sentences.length;
-  var learned=Object.keys(engLearned).filter(function(k){return engLearned[k];}).length;
-  $('#engBar').style.width=Math.round(learned/total*100)+'%';$('#engStats').textContent=learned+'/'+total;
-  $('#engContent').innerHTML=data.sentences.map(function(s,i){var done=engLearned[i];return '<div class="sentence-card" style="'+(done?'opacity:.65':'')+'" data-idx="'+i+'"><div class="en">'+(done?'✅ ':'')+s.en+'</div><div class="cn">'+s.cn+'</div><div class="tags"><span class="tag tip">'+s.pron+'</span>'+(done?'<span class="tag" style="background:var(--green-light);color:var(--green-dark)">已掌握</span>':'')+'</div><button class="speak-mini" data-idx="'+i+'">🔊</button></div>';}).join('');
-  $$('#engContent .sentence-card').forEach(function(card){card.addEventListener('click',function(e){if(e.target.closest('.speak-mini'))return;var idx=parseInt(card.dataset.idx);engLearned[idx]=!engLearned[idx];saveEngLearned();renderEngContent();updateFlashcard();});});
-  $$('.speak-mini').forEach(function(btn){btn.addEventListener('click',function(e){e.stopPropagation();speakText(data.sentences[parseInt(btn.dataset.idx)].en);});});
-  $('#engWords').innerHTML='<h3>📝 核心词汇</h3>'+data.words.map(function(w,i){return '<div class="phrase-item"><div class="num">'+(i+1)+'</div><div class="body"><div class="eng">'+w.en+'</div><div class="chn">'+w.cn+'</div><div class="pron">'+w.pron+'</div></div><button class="speak-mini" data-word="'+i+'">🔊</button></div>';}).join('');
-  $$('#engWords .speak-mini').forEach(function(btn){btn.addEventListener('click',function(e){e.stopPropagation();speakText(data.words[parseInt(btn.dataset.word)].en);});});
-  updateFlashcard();
+const ENG_DATA = {
+  daily: [
+    {en:"How are you doing?",cn:"你最近怎么样？",pron:"/haʊ ɑːr ju ˈduːɪŋ/"},
+    {en:"I really appreciate it.",cn:"我真的很感激。",pron:"/aɪ ˈrɪəli əˈpriːʃieɪt ɪt/"},
+    {en:"Could you give me a hand?",cn:"能帮我一下吗？",pron:"/kʊd ju ɡɪv mi ə hænd/"},
+    {en:"Let me think about it.",cn:"让我想想。",pron:"/let mi θɪŋk əˈbaʊt ɪt/"},
+    {en:"What's on your mind?",cn:"你在想什么呢？",pron:"/wɒts ɒn jɔːr maɪnd/"},
+    {en:"I'm on my way.",cn:"我在路上了。",pron:"/aɪm ɒn maɪ weɪ/"},
+    {en:"That sounds great!",cn:"听起来不错！",pron:"/ðæt saʊndz ɡreɪt/"},
+    {en:"No worries at all.",cn:"完全不用担心。",pron:"/noʊ ˈwʌriz æt ɔːl/"},
+  ],
+  travel: [
+    {en:"Where is the nearest subway?",cn:"最近的地铁站在哪？",pron:"/weər ɪz ðə ˈnɪərɪst ˈsʌbweɪ/"},
+    {en:"Can I have the menu please?",cn:"能给我看看菜单吗？",pron:"/kæn aɪ hæv ðə ˈmenjuː pliːz/"},
+    {en:"How much does it cost?",cn:"这个多少钱？",pron:"/haʊ mʌtʃ dʌz ɪt kɒst/"},
+    {en:"I'd like to check in.",cn:"我想办理入住。",pron:"/aɪd laɪk tə tʃek ɪn/"},
+    {en:"Could you take a photo for me?",cn:"能帮我拍张照吗？",pron:"/kʊd ju teɪk ə ˈfoʊtoʊ fɔːr mi/"},
+    {en:"Is there free Wi-Fi here?",cn:"这里有免费Wi-Fi吗？",pron:"/ɪz ðeər friː waɪfaɪ hɪər/"},
+    {en:"What time does it open?",cn:"几点开门？",pron:"/wɒt taɪm dʌz ɪt ˈoʊpən/"},
+    {en:"I'll have the same, please.",cn:"我要一样的，谢谢。",pron:"/aɪl hæv ðə seɪm pliːz/"},
+  ],
+  bags: [
+    {en:"This bag is made of genuine leather.",cn:"这款包是真皮的。",pron:"/ðɪs bæɡ ɪz meɪd əv ˈdʒenjuɪn ˈleðər/"},
+    {en:"Do you have this in black?",cn:"这款有黑色的吗？",pron:"/du ju hæv ðɪs ɪn blæk/"},
+    {en:"What's the capacity of this bag?",cn:"这个包的容量是多少？",pron:"/wɒts ðə kəˈpæsɪti əv ðɪs bæɡ/"},
+    {en:"This is our best-selling item.",cn:"这是我们的爆款。",pron:"/ðɪs ɪz aʊər best ˈselɪŋ ˈaɪtəm/"},
+    {en:"The quality is excellent.",cn:"质量非常好。",pron:"/ðə ˈkwɒləti ɪz ˈeksələnt/"},
+    {en:"It comes with a dust bag.",cn:"配有防尘袋。",pron:"/ɪt kʌmz wɪð ə dʌst bæɡ/"},
+    {en:"We offer worldwide shipping.",cn:"我们支持全球配送。",pron:"/wi ˈɒfər ˈwɜːldwaɪd ˈʃɪpɪŋ/"},
+    {en:"This style is very popular this season.",cn:"这个款式这季很流行。",pron:"/ðɪs staɪl ɪz ˈveri ˈpɒpjələr ðɪs ˈsiːzn/"},
+  ]
+};
+let engScene='daily',engIdx=0,engLearned=JSON.parse(localStorage.getItem('engLearned')||'[]');
+
+function speakText(text){
+  if(!('speechSynthesis' in window)){alert('你的浏览器不支持语音');return;}
+  window.speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(text);
+  u.lang='en-US';u.rate=0.85;
+  window.speechSynthesis.speak(u);
 }
-function setupFlashcard(){var card=document.getElementById('flashcard');var sx=0,sy=0,lt=null;card.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;lt=setTimeout(function(){var s=ENG_DATA[engScene].sentences[fcIdx%ENG_DATA[engScene].sentences.length];speakText(s.en);},500);});card.addEventListener('touchmove',function(){clearTimeout(lt);});card.addEventListener('touchend',function(e){clearTimeout(lt);var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)<20&&Math.abs(dy)<20){card.classList.toggle('flipped');return;}if(Math.abs(dx)<30||Math.abs(dy)>Math.abs(dx))return;var data=ENG_DATA[engScene];if(dx>0){engLearned[fcIdx%data.sentences.length]=true;saveEngLearned();renderEngContent();}fcIdx=(fcIdx+1)%data.sentences.length;updateFlashcard();card.classList.remove('flipped');});card.addEventListener('click',function(){card.classList.toggle('flipped');});}
-function setupEngTabs(){$$('.eng-tab').forEach(function(tab){tab.addEventListener('click',function(){$$('.eng-tab').forEach(function(t){t.classList.remove('on');});tab.classList.add('on');engScene=tab.dataset.scene;loadEngLearned();fcIdx=0;renderEngContent();});});}
-const DAILY_QUOTES=[{en:"The secret of getting ahead is getting started.",cn:'前进的秘诀就是开始行动。',from:'Mark Twain'},{en:"Small daily improvements lead to staggering results.",cn:'每天的小进步，成就惊人的结果。',from:''},{en:"Don't watch the clock; do what it does.",cn:'不要盯着时钟，像它一样不断前进。',from:'Sam Levenson'},{en:"The only way to do great work is to love what you do.",cn:'伟大工作的唯一途径是热爱。',from:'Steve Jobs'},{en:"You don't have to be great to start.",cn:'不需要很厉害才能开始。',from:'Zig Ziglar'},{en:"Every expert was once a beginner.",cn:'每个专家都曾是初学者。',from:'Helen Hayes'},{en:"Believe you can and you're halfway there.",cn:'相信你可以，你就成功了一半。',from:'Roosevelt'},{en:"Action is the foundational key to all success.",cn:'行动是一切成功的基础。',from:'Picasso'},{en:"Stay hungry, stay foolish.",cn:'求知若饥，虚心若愚。',from:'Steve Jobs'},{en:"The future depends on what you do today.",cn:'未来取决于你今天做了什么。',from:'Gandhi'}];
-function renderDailyQuote(){var today=new Date();var idx=(today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate())%DAILY_QUOTES.length;var q=DAILY_QUOTES[idx];$('#dailyQuote').innerHTML='<div class="dq-label">📜 每日一句 · '+(today.getMonth()+1)+'月'+today.getDate()+'日</div><div class="dq-en">'+q.en+'</div><div class="dq-cn">'+q.cn+'</div>'+(q.from?'<div class="dq-from">— '+q.from+'</div>':'')+'<button class="dq-speak">🔊</button>';$('#dailyQuote .dq-speak').addEventListener('click',function(){speakText(q.en);});}
+
+function renderFlashcard(){
+  var card=ENG_DATA[engScene][engIdx];
+  $('#fcEn').textContent=card.en;
+  $('#fcCn').textContent=card.cn;
+  $('#fcPron').textContent=card.pron;
+  $('#flashcard').classList.remove('flipped');
+  var learned=engLearned.filter(function(x){return x.scene===engScene;});
+  $('#engStats').textContent=learned.length+'/'+ENG_DATA[engScene].length;
+  $('#engBar').style.width=(learned.length/ENG_DATA[engScene].length*100)+'%';
+}
+
+function renderEngContent(){
+  var sceneData=ENG_DATA[engScene];
+  var learned=engLearned.filter(function(x){return x.scene===engScene;}).map(function(x){return x.en;});
+  var html='<div class="subpage-card"><h3>📝 今日词句</h3>';
+  sceneData.forEach(function(item,i){
+    var isLearned=learned.indexOf(item.en)>-1;
+    html+='<div class="phrase-item"><div class="num" style="'+(isLearned?'background:var(--green);color:#fff':'')+'">'+(i+1)+'</div><div class="body"><div class="eng">'+item.en+'</div><div class="chn">'+item.cn+'</div><div class="pron">'+item.pron+'</div></div><button class="speak-mini" data-text="'+item.en+'">🔊</button></div>';
+  });
+  html+='</div>';
+  $('#engContent').innerHTML=html;
+  $$('#engContent .speak-mini').forEach(function(btn){
+    btn.addEventListener('click',function(e){e.stopPropagation();speakText(this.dataset.text);});
+  });
+}
+
+function setupEngTabs(){
+  $$('#engTabs .eng-tab').forEach(function(tab){
+    tab.addEventListener('click',function(){
+      $$('#engTabs .eng-tab').forEach(function(t){t.classList.remove('on');});
+      tab.classList.add('on');
+      engScene=tab.dataset.scene;
+      engIdx=0;
+      renderFlashcard();
+      renderEngContent();
+    });
+  });
+}
+
+function setupFlashcard(){
+  var fc=$('#flashcard');
+  var touchStartX=0;
+  fc.addEventListener('click',function(){fc.classList.toggle('flipped');});
+  fc.addEventListener('touchstart',function(e){touchStartX=e.touches[0].clientX;});
+  fc.addEventListener('touchend',function(e){
+    var diff=e.changedTouches[0].clientX-touchStartX;
+    if(diff>60){
+      var item=ENG_DATA[engScene][engIdx];
+      if(engLearned.filter(function(x){return x.scene===engScene&&x.en===item.en;}).length===0){
+        engLearned.push({scene:engScene,en:item.en,date:new Date().toISOString().slice(0,10)});
+        localStorage.setItem('engLearned',JSON.stringify(engLearned));
+      }
+      engIdx=(engIdx+1)%ENG_DATA[engScene].length;
+      renderFlashcard();
+      renderEngContent();
+    }else if(diff<-60){
+      engIdx=(engIdx+1)%ENG_DATA[engScene].length;
+      renderFlashcard();
+      renderEngContent();
+    }
+  });
+  var longPressTimer;
+  fc.addEventListener('touchstart',function(e){
+    longPressTimer=setTimeout(function(){speakText(ENG_DATA[engScene][engIdx].en);},500);
+  });
+  fc.addEventListener('touchend',function(){clearTimeout(longPressTimer);});
+  fc.addEventListener('touchmove',function(){clearTimeout(longPressTimer);});
+}
+
+// ============ 每日金句 ============
+const QUOTES=[
+  {en:"The best time to plant a tree was 20 years ago. The second best time is now.",cn:"种一棵树最好的时间是二十年前，其次是现在。",from:"Chinese Proverb"},
+  {en:"It does not matter how slowly you go as long as you do not stop.",cn:"走得慢没关系，只要不停下。",from:"Confucius"},
+  {en:"Believe you can and you're halfway there.",cn:"相信你能做到，你就已经成功了一半。",from:"Theodore Roosevelt"},
+  {en:"The secret of getting ahead is getting started.",cn:"前进的秘诀就是开始行动。",from:"Mark Twain"},
+  {en:"Don't watch the clock; do what it does. Keep going.",cn:"别盯着时钟看，像它一样——继续前进。",from:"Sam Levenson"},
+  {en:"Everything you've ever wanted is on the other side of fear.",cn:"你想要的都在恐惧的另一边。",from:"George Addair"},
+  {en:"Success is not final, failure is not fatal: it is the courage to continue that counts.",cn:"成功不是终点，失败也不致命——继续前行的勇气才最重要。",from:"Winston Churchill"},
+];
+function renderQuote(){
+  var q=QUOTES[Math.floor(Math.random()*QUOTES.length)];
+  $('#dailyQuote').innerHTML='<div class="dq-label">📖 每日金句</div><div class="dq-en">"'+q.en+'"</div><div class="dq-cn">'+q.cn+'</div><div class="dq-from">—— '+q.from+'</div><button class="dq-speak" data-text="'+q.en+'">🔊</button>';
+  var btn=$('#dailyQuote .dq-speak');
+  if(btn)btn.addEventListener('click',function(e){e.stopPropagation();speakText(this.dataset.text);});
+}
 
 // ============ 穿搭 ============
+const OUTFIT_PRESETS=[
+  {icon:'👗',label:'通勤优雅',items:[{name:'法式收腰茶歇裙',desc:'V领显瘦+膝盖下长度，158cm友好',color:'#7AC74F'},{name:'针织短开衫+阔腿裤',desc:'上短下长拉高腰线',color:'#9B7ED8'}]},
+  {icon:'👖',label:'休闲逛街',items:[{name:'短款卫衣+高腰直筒裤',desc:'遮胯显腿长',color:'#5B9BD5'},{name:'条纹T+牛仔A字裙',desc:'经典不出错',color:'#FF8C42'}]},
+  {icon:'🎀',label:'甜美约会',items:[{name:'泡泡袖方领上衣+百褶裙',desc:'温柔甜美，优化头身比',color:'#FF6B9D'},{name:'蕾丝边针织+鱼尾半裙',desc:'小个子也能穿的鱼尾裙',color:'#E8A0BF'}]},
+  {icon:'🏃',label:'运动户外',items:[{name:'短款运动背心+高腰leggings',desc:'拉长腿部线条',color:'#A6CC8A'},{name:'防晒衫+运动短裤',desc:'轻便透气，显高显瘦',color:'#7FB7E8'}]},
+];
+
+function renderOutfit(){
+  var html='';
+  OUTFIT_PRESETS.forEach(function(style){
+    html+='<div class="outfit-slot"><div class="icon">'+style.icon+'</div><div class="label">'+style.label+'</div><div class="val">'+style.items[0].name+'</div></div>';
+    html+='<div class="outfit-slot"><div class="icon">'+style.icon+'</div><div class="label">'+style.label+'·备选</div><div class="val">'+style.items[1].name+'</div></div>';
+  });
+  $('#outfitGrid').innerHTML=html;
+
+  // Video recommendations
+  var videos=[
+    {title:'158cm小个子一周穿搭不重样',style:'通勤+休闲',color:'#FF6B9D',icon:'🎬'},
+    {title:'小个子显高10cm穿搭秘籍',style:'显高技巧',color:'#7AC74F',icon:'📐'},
+    {title:'158cm梨形身材穿搭指南',style:'梨形专属',color:'#5B9BD5',icon:'🍐'},
+    {title:'小个子夏日连衣裙推荐',style:'裙装合集',color:'#9B7ED8',icon:'👗'},
+    {title:'158cm秋冬显瘦穿搭',style:'季节穿搭',color:'#FF8C42',icon:'🧥'},
+  ];
+  $('#outfitVideos').innerHTML=videos.map(function(v){
+    return '<div class="video-row"><div class="thumb" style="background:linear-gradient(135deg,'+v.color+'33,'+v.color+'66)">'+v.icon+'</div><div class="info"><div class="vtitle">'+v.title+'</div><div class="style">'+v.style+'</div></div></div>';
+  }).join('');
+
+  // Style inspiration
+  var styles=[
+    {name:'法式极简',color:'#5B9BD5'},
+    {name:'韩系温柔',color:'#FF6B9D'},
+    {name:'日系通勤',color:'#7AC74F'},
+    {name:'新中式',color:'#9B7ED8'},
+    {name:'美式复古',color:'#FF8C42'},
+    {name:'学院风',color:'#E8A0BF'},
+  ];
+  $('#styleInspo').innerHTML='<div class="style-tags">'+styles.map(function(s){
+    return '<div class="style-tag" style="background:'+s.color+'">'+s.name+'</div>';
+  }).join('')+'</div>';
+}
+
+// ============ 心情 ============
+const MOODS=[
+  {emoji:'😄',label:'超开心'},
+  {emoji:'😊',label:'还不错'},
+  {emoji:'😌',label:'很平静'},
+  {emoji:'🤔',label:'有点懵'},
+  {emoji:'😢',label:'有点丧'},
+  {emoji:'😤',label:'很烦躁'},
+  {emoji:'🥰',label:'被治愈'},
+  {emoji:'💪',label:'充满能量'},
+];
+
 function renderMood(){
-  var moods=[{emoji:'😄',label:'超开心',color:'#FFD93D'},{emoji:'😊',label:'开心',color:'#FFB347'},{emoji:'😌',label:'平静',color:'#7AC74F'},{emoji:'🤔',label:'思考中',color:'#5B9BD5'},{emoji:'😣',label:'有点烦',color:'#FF8C42'},{emoji:'😢',label:'难过',color:'#9B7ED8'},{emoji:'😤',label:'生气',color:'#FF6B6B'},{emoji:'😴',label:'好累',color:'#A0A0A0'}];
+  $('#moodWheel').innerHTML=MOODS.map(function(m,i){
+    return '<div class="mood-emoji" data-mood="'+i+'">'+m.emoji+'<span class="label">'+m.label+'</span></div>';
+  }).join('');
+
+  var savedMoods=JSON.parse(localStorage.getItem('moodHistory')||'[]');
   var today=new Date().toISOString().slice(0,10);
-  var saved=localStorage.getItem('mood_'+today);
-  $('#moodWheel').innerHTML=moods.map(function(m){return '<div class="mood-emoji'+(saved===m.emoji?' selected':'')+'" data-emoji="'+m.emoji+'"><span style="font-size:36px">'+m.emoji+'</span><span class="label">'+m.label+'</span></div>';}).join('');
-  $$('.mood-emoji').forEach(function(el){el.addEventListener('click',function(){$$('.mood-emoji').forEach(function(x){x.classList.remove('selected');});el.classList.add('selected');localStorage.setItem('mood_'+today,el.dataset.emoji);renderMoodJournal();});});
+  var todayMood=savedMoods.find(function(m){return m.date===today;});
+
+  if(todayMood!==undefined){
+    var el=$('.mood-emoji[data-mood="'+todayMood.mood+'"]');
+    if(el)el.classList.add('selected');
+  }
+
+  $$('#moodWheel .mood-emoji').forEach(function(el){
+    el.addEventListener('click',function(){
+      $$('#moodWheel .mood-emoji').forEach(function(e){e.classList.remove('selected');});
+      el.classList.add('selected');
+      var moodIdx=parseInt(el.dataset.mood);
+      var existing=savedMoods.findIndex(function(m){return m.date===today;});
+      if(existing>-1){savedMoods[existing].mood=moodIdx;}
+      else{savedMoods.push({date:today,mood:moodIdx});}
+      localStorage.setItem('moodHistory',JSON.stringify(savedMoods));
+      renderMoodJournal();
+    });
+  });
+
   renderMoodJournal();
 }
+
 function renderMoodJournal(){
-  var today=new Date().toISOString().slice(0,10);
-  var note=localStorage.getItem('mood_note_'+today)||'';
-  var history='';
-  for(var i=6;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);var ds=d.toISOString().slice(0,10);var m=localStorage.getItem('mood_'+ds);if(m){history+='<div class="day"><div>'+m+'</div><div class="date">'+(d.getMonth()+1)+'/'+d.getDate()+'</div></div>';}}
-  $('#moodJournal').innerHTML='<h3>📝 今日心情记录</h3><textarea id="moodNote" placeholder="今天发生了什么…" style="width:100%;min-height:80px;margin-top:8px;padding:10px;border-radius:12px;border:1px solid #ddd;font-size:13px;resize:none;outline:none">'+note+'</textarea><button class="btn-sm" id="saveMoodBtn" style="margin-top:8px;background:var(--pink);color:#fff;padding:8px 16px">💾 保存</button><h4 style="margin-top:12px">📅 最近心情</h4><div class="history">'+(history||'<span style="font-size:12px;color:var(--gray-600)">还没有记录~</span>')+'</div>';
-  document.getElementById('saveMoodBtn').addEventListener('click',function(){localStorage.setItem('mood_note_'+today,document.getElementById('moodNote').value);alert('已保存 ✅');});
+  var savedMoods=JSON.parse(localStorage.getItem('moodHistory')||'[]');
+  var note=localStorage.getItem('moodNote_'+new Date().toISOString().slice(0,10))||'';
+  var last7=savedMoods.slice(-7).reverse();
+  var historyHtml='<div class="history">'+last7.map(function(m){
+    var mood=MOODS[m.mood];
+    return '<div class="day">'+mood.emoji+'<div class="date">'+m.date.slice(5)+'</div></div>';
+  }).join('')+'</div>';
+
+  $('#moodJournal').innerHTML='<h3>💭 心情记录</h3><textarea id="moodNote" placeholder="今天发生了什么..." style="width:100%;min-height:60px;padding:10px;border-radius:12px;border:1px solid #ddd;font-size:13px;resize:none;outline:none;margin-top:8px">'+note+'</textarea><button class="btn-sm" id="saveMoodBtn" style="margin-top:8px;background:var(--pink);color:#fff;padding:8px 16px">保存</button>'+historyHtml;
+
+  setTimeout(function(){
+    var saveBtn=$('#saveMoodBtn');
+    if(saveBtn)saveBtn.addEventListener('click',function(){
+      var text=$('#moodNote').value;
+      localStorage.setItem('moodNote_'+new Date().toISOString().slice(0,10),text);
+      alert('心情已保存 ❤️');
+    });
+  },100);
 }
 
 // ============ 读书 ============
-const BOOKS_SPEECH=[{icon:'📕',title:'《即兴演讲》',author:'Judith Humphrey',color:'#FFE0E0'},{icon:'📗',title:'《沟通的艺术》',author:'Ronald Adler',color:'#D4F5F0'},{icon:'📙',title:'《关键对话》',author:'Kerry Patterson',color:'#FFF3E0'},{icon:'📘',title:'《影响力》',author:'Robert Cialdini',color:'#E8E4FF'}];
-const BOOKS_PARENT=[{icon:'📓',title:'《正面管教》',author:'Jane Nelsen',color:'#F5E6F0'},{icon:'📔',title:'《如何说孩子才会听》',author:'Adele Faber',color:'#E8F5DC'},{icon:'📕',title:'《游戏力》',author:'Lawrence Cohen',color:'#FFE8E0'},{icon:'📗',title:'《园丁与木匠》',author:'Alison Gopnik',color:'#E0F0FF'}];
-const BOOKS_NOVEL=[{icon:'📙',title:'《活着》',author:'余华',color:'#FFF8E0'},{icon:'📘',title:'《百年孤独》',author:'马尔克斯',color:'#E8F0FF'},{icon:'📓',title:'《小王子》',author:'圣埃克苏佩里',color:'#FFF0E8'},{icon:'📔',title:'《月亮与六便士》',author:'毛姆',color:'#E8FFE8'}];
-function renderBookSection(id,books,storageKey){
-  var progress={};try{progress=JSON.parse(localStorage.getItem(storageKey)||'{}');}catch(e){}
-  $('#'+id).innerHTML=books.map(function(b,i){var pct=progress[i]||0;var done=pct>=100;return '<div class="book-card"><div class="cover" style="background:'+b.color+'">'+b.icon+'</div><div class="info"><div class="btitle">'+b.title+'</div><div class="author">'+b.author+'</div><div class="pbar"><div class="fill" style="width:'+pct+'%;background:'+b.color+'"></div></div><div class="pct">'+(done?'✅ 已读完':'📖 '+pct+'%')+'</div></div><div class="check-btn'+(done?' done':'')+'" data-bidx="'+i+'">'+(done?'✓':'')+'</div></div>';}).join('');
-  $$('#'+id+' .check-btn').forEach(function(btn){btn.addEventListener('click',function(){var i=parseInt(btn.dataset.bidx);if(progress[i]>=100){progress[i]=0;}else{progress[i]=Math.min(100,(progress[i]||0)+25);}localStorage.setItem(storageKey,JSON.stringify(progress));renderBookSection(id,books,storageKey);});});
+const BOOKS_SPEECH=[
+  {title:'非暴力沟通',author:'马歇尔·卢森堡',cover:'🗣️',color:'#5B9BD5',progress:45},
+  {title:'关键对话',author:'科里·帕特森',cover:'💬',color:'#7AC74F',progress:30},
+  {title:'演讲的力量',author:'克里斯·安德森',cover:'🎤',color:'#FF8C42',progress:60},
+  {title:'沟通的艺术',author:'罗纳德·B·阿德勒',cover:'🤝',color:'#9B7ED8',progress:15},
+];
+const BOOKS_PARENT=[
+  {title:'正面管教',author:'简·尼尔森',cover:'👶',color:'#FF6B9D',progress:70},
+  {title:'如何说孩子才会听',author:'阿黛尔·法伯',cover:'👂',color:'#7AC74F',progress:50},
+  {title:'游戏力',author:'劳伦斯·科恩',cover:'🎮',color:'#5B9BD5',progress:25},
+  {title:'好妈妈胜过好老师',author:'尹建莉',cover:'📖',color:'#FF8C42',progress:85},
+];
+const BOOKS_NOVEL=[
+  {title:'活着',author:'余华',cover:'📕',color:'#E8A0BF',progress:100},
+  {title:'百年孤独',author:'加西亚·马尔克斯',cover:'📗',color:'#7AC74F',progress:40},
+  {title:'小王子',author:'圣埃克苏佩里',cover:'📘',color:'#5B9BD5',progress:100},
+  {title:'月亮与六便士',author:'毛姆',cover:'📙',color:'#FF8C42',progress:55},
+];
+
+function loadBookProgress(){
+  try{return JSON.parse(localStorage.getItem('bookProgress')||'{}');}catch(e){return {};}
 }
-function renderBooks(){renderBookSection('bookSpeech',BOOKS_SPEECH,'book_speech');renderBookSection('bookParent',BOOKS_PARENT,'book_parent');renderBookSection('bookNovel',BOOKS_NOVEL,'book_novel');var note=localStorage.getItem('reading_note')||'';document.getElementById('readingNote').value=note;document.getElementById('saveNoteBtn').addEventListener('click',function(){localStorage.setItem('reading_note',document.getElementById('readingNote').value);alert('笔记已保存 ✅');});}
+function saveBookProgress(p){localStorage.setItem('bookProgress',JSON.stringify(p));}
+
+function renderBookSection(containerId,books){
+  var progress=loadBookProgress();
+  var html='';
+  books.forEach(function(b,i){
+    var pct=progress[b.title]!==undefined?progress[b.title]:b.progress;
+    html+='<div class="book-card"><div class="cover" style="background:'+b.color+'22">'+b.cover+'</div><div class="info"><div class="btitle">'+b.title+'</div><div class="author">'+b.author+'</div><div class="pbar"><div class="fill" style="width:'+pct+'%;background:'+b.color+'"></div></div><div class="pct">进度 '+pct+'%</div></div><button class="check-btn'+(pct>=100?' done':'')+'" data-book="'+b.title+'">✓</button></div>';
+  });
+  $(containerId).innerHTML=html;
+  $$(containerId+' .check-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var title=btn.dataset.book;
+      var prog=loadBookProgress();
+      var current=prog[title]!==undefined?prog[title]:books.find(function(b){return b.title===title;}).progress;
+      var newPct=Math.min(current+10,100);
+      prog[title]=newPct;
+      saveBookProgress(prog);
+      renderAllBooks();
+    });
+  });
+}
+
+function renderAllBooks(){
+  renderBookSection('#bookSpeech',BOOKS_SPEECH);
+  renderBookSection('#bookParent',BOOKS_PARENT);
+  renderBookSection('#bookNovel',BOOKS_NOVEL);
+}
+
+function setupReadingNotes(){
+  var note=localStorage.getItem('readingNote')||'';
+  $('#readingNote').value=note;
+  $('#saveNoteBtn').addEventListener('click',function(){
+    localStorage.setItem('readingNote',$('#readingNote').value);
+    alert('笔记已保存 📝');
+  });
+}
 
 // ============ 亲子启蒙 ============
 const KIDS_DATA={
-  literacy:[{icon:'🔤',name:'今日识字：5个新汉字',desc:'人、口、手、大、天'},{icon:'📖',name:'绘本指读练习',desc:'选一本绘本，手指指读10分钟'},{icon:'✏️',name:'描红练习',desc:'田字格描红，注意笔顺'},{icon:'🎯',name:'汉字配对游戏',desc:'图片与汉字配对卡片'}],
-  math:[{icon:'🔢',name:'数数练习：1-100',desc:'正数倒数，跳数（2/5/10）'},{icon:'➕',name:'10以内加减法',desc:'用实物辅助理解'},{icon:'📐',name:'图形认知',desc:'圆形/方形/三角形/梯形'},{icon:'🎲',name:'比大小游戏',desc:'骰子比大小，认识大于小于'}],
-  english:[{icon:'🌐',name:'字母认知A-G',desc:'大小写+自然拼读发音'},{icon:'🎵',name:'英文儿歌磨耳朵',desc:'ABC Song / Baby Shark'},{icon:'📱',name:'单词闪卡',desc:'apple/banana/cat/dog/fish'},{icon:'🎮',name:'英语互动游戏',desc:'Simon Says / I Spy'}],
-  game:[{icon:'🧩',name:'拼图挑战',desc:'12-24片拼图，锻炼专注力'},{icon:'🎨',name:'创意手工',desc:'剪纸/折纸/橡皮泥'},{icon:'♟️',name:'五子棋入门',desc:'培养策略思维'},{icon:'🧠',name:'迷宫与找不同',desc:'观察力训练'}],
+  literacy:[
+    {char:'大',desc:'大人、大象 —— 一个人张开双臂就是"大"',icon:'🐘'},
+    {char:'小',desc:'小孩、小鸟 —— 两只手靠很近就是"小"',icon:'🐦'},
+    {char:'上',desc:'上面、上楼 —— 一横在上，箭头朝上',icon:'⬆️'},
+    {char:'下',desc:'下面、下楼 —— 一横在下，箭头朝下',icon:'⬇️'},
+    {char:'山',desc:'大山、山顶 —— 三个山峰连起来',icon:'⛰️'},
+    {char:'水',desc:'喝水、河水 —— 像流动的水滴',icon:'💧'},
+    {char:'火',desc:'火焰、火车 —— 像燃烧的火苗',icon:'🔥'},
+    {char:'口',desc:'嘴巴、门口 —— 张开的嘴巴形状',icon:'👄'},
+  ],
+  math:[
+    {char:'1+1=2',desc:'一个苹果加一个苹果，两个苹果',icon:'🍎'},
+    {char:'5以内加法',desc:'用手指头数：1+2=3, 2+3=5',icon:'✋'},
+    {char:'比大小',desc:'5比3大，3比5小 —— 用实物比较',icon:'⚖️'},
+    {char:'认识形状',desc:'圆形○、方形□、三角形△',icon:'🔺'},
+    {char:'分类游戏',desc:'把玩具按颜色/大小分堆',icon:'🧩'},
+    {char:'数到20',desc:'一个一个数：1,2,3...20',icon:'🔢'},
+    {char:'找规律',desc:'红蓝红蓝红_？下一个是什么',icon:'🔄'},
+    {char:'认识钟表',desc:'长针短针，几点几分',icon:'🕐'},
+  ],
+  english:[
+    {char:'Apple',desc:'苹果 —— A for Apple',icon:'🍎'},
+    {char:'Cat',desc:'猫咪 —— C for Cat',icon:'🐱'},
+    {char:'Dog',desc:'狗狗 —— D for Dog',icon:'🐶'},
+    {char:'Fish',desc:'鱼 —— F for Fish',icon:'🐟'},
+    {char:'Hello!',desc:'你好！见面打招呼',icon:'👋'},
+    {char:'Thank you',desc:'谢谢你！收到礼物时说',icon:'🎁'},
+    {char:'Red/Blue/Yellow',desc:'红/蓝/黄 —— 基础颜色',icon:'🎨'},
+    {char:'One Two Three',desc:'一、二、三 —— 数数',icon:'🔢'},
+  ],
+  game:[
+    {char:'七巧板拼图',desc:'用7块板拼出各种图案，锻炼空间思维',icon:'🧩'},
+    {char:'找不同',desc:'两幅图中找出5处不同，训练观察力',icon:'🔍'},
+    {char:'迷宫游戏',desc:'帮小兔子找到回家的路',icon:'🐰'},
+    {char:'记忆翻牌',desc:'翻牌配对，记住位置，训练记忆力',icon:'🃏'},
+    {char:'连线画图',desc:'按数字顺序连线，画出隐藏图案',icon:'✏️'},
+    {char:'积木搭建',desc:'按图搭积木，锻炼手眼协调',icon:'🧱'},
+    {char:'猜谜语',desc:'"上边毛下边毛，中间一颗黑葡萄"',icon:'❓'},
+    {char:'剪纸手工',desc:'剪出各种形状，锻炼精细动作',icon:'✂️'},
+  ]
 };
+
 let kidsTab='literacy';
-function renderKids(){
-  var key='kids_'+kidsTab;var done={};try{done=JSON.parse(localStorage.getItem(key)||'{}');}catch(e){}
+let kidsStars=JSON.parse(localStorage.getItem('kidsStars')||'{}');
+
+function renderKidsContent(){
   var data=KIDS_DATA[kidsTab];
-  $('#kidsContent').innerHTML='<div class="subpage-card"><h3>📋 今日任务</h3>'+data.map(function(d,i){var isDone=done[i];return '<div class="kids-card"><div class="kicon">'+d.icon+'</div><div class="kinfo"><div class="kname">'+(isDone?'✅ ':'')+d.name+'</div><div class="kdesc">'+d.desc+'</div></div><div class="kstar'+(isDone?' on':'')+'" data-kidx="'+i+'">⭐</div></div>';}).join('')+'</div>';
-  $$('#kidsContent .kstar').forEach(function(star){star.addEventListener('click',function(){var i=parseInt(star.dataset.kidx);done[i]=!done[i];localStorage.setItem(key,JSON.stringify(done));renderKids();});});
+  var html='';
+  data.forEach(function(item,i){
+    var starred=kidsStars[kidsTab+'_'+i];
+    html+='<div class="kids-card"><div class="kicon">'+item.icon+'</div><div class="kinfo"><div class="kname">'+item.char+'</div><div class="kdesc">'+item.desc+'</div></div><div class="kstar'+(starred?' on':'')+'" data-tab="'+kidsTab+'" data-idx="'+i+'">⭐</div></div>';
+  });
+  $('#kidsContent').innerHTML=html;
+
+  $$('#kidsContent .kstar').forEach(function(star){
+    star.addEventListener('click',function(){
+      var key=star.dataset.tab+'_'+star.dataset.idx;
+      kidsStars[key]=!kidsStars[key];
+      localStorage.setItem('kidsStars',JSON.stringify(kidsStars));
+      star.classList.toggle('on',kidsStars[key]);
+    });
+  });
 }
-function setupKidsTabs(){$$('.ktab').forEach(function(tab){tab.addEventListener('click',function(){$$('.ktab').forEach(function(t){t.classList.remove('on');});tab.classList.add('on');kidsTab=tab.dataset.ktab;renderKids();});});}
+
+function setupKidsTabs(){
+  $$('#kidsTabs .ktab').forEach(function(tab){
+    tab.addEventListener('click',function(){
+      $$('#kidsTabs .ktab').forEach(function(t){t.classList.remove('on');});
+      tab.classList.add('on');
+      kidsTab=tab.dataset.ktab;
+      renderKidsContent();
+    });
+  });
+}
 
 // ============ 每日爆款 ============
+const HOT_PRODUCTS=[
+  {name:'法式复古链条包',price:'¥269',desc:'鳄鱼纹PU 百搭斜挎 多色可选',icon:'👜',color:'#9B7ED8'},
+  {name:'极简大容量托特包',price:'¥189',desc:'帆布+牛皮拼接 通勤必备',icon:'🛍️',color:'#5B9BD5'},
+  {name:'糖果色迷你水桶包',price:'¥159',desc:'抽绳设计 轻便可爱 春夏爆款',icon:'🪣',color:'#FF6B9D'},
+  {name:'菱格链条单肩包',price:'¥328',desc:'小香风经典款 气质名媛',icon:'✨',color:'#FFD93D'},
+  {name:'牛皮邮差包',price:'¥245',desc:'复古学院风 大容量 耐造',icon:'📬',color:'#7AC74F'},
+  {name:'透明果冻包',price:'¥128',desc:'PVC潮流款 夏日清凉感',icon:'🍬',color:'#FF8C42'},
+  {name:'编织草编包',price:'¥99',desc:'度假风 田园清新 夏日必备',icon:'🌿',color:'#A6CC8A'},
+  {name:'马鞍包半月包',price:'¥289',desc:'圆弧设计 简约高级 通勤约会两用',icon:'🌙',color:'#E8A0BF'},
+  {name:'云朵包手拿包',price:'¥198',desc:'软糯蓬松 温柔气质 拍照出片',icon:'☁️',color:'#C4A6E8'},
+  {name:'双肩背包',price:'¥210',desc:'轻量尼龙 大容量 妈妈包首选',icon:'🎒',color:'#7FB7E8'},
+];
+
 function renderHot(){
-  var today=new Date();var dayIdx=(today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate())%10;
-  var allProducts=[
-    [{name:'云朵腋下包',price:'169',desc:'软皮褶皱设计·莫兰迪色系·腋下背',color:'#FFE0EB',rank:'1'},{name:'复古法棍包',price:'219',desc:'鳄鱼纹压花·金色锁扣·斜挎单肩',color:'#E0F0FF',rank:'2'},{name:'mini波士顿包',price:'259',desc:'定型包身·YKK拉链·通勤百搭',color:'#FFF3E0',rank:'3'},{name:'褶皱云朵包',price:'189',desc:'羊皮手感·磁吸扣·ins同款',color:'#F0E8FF',rank:'4'},{name:'托特通勤包',price:'299',desc:'大容量·子母袋·真皮手柄',color:'#E8F5DC',rank:'5'}],
-    [{name:'菱格链条包',price:'149',desc:'小香风·金属链条·多色可选',color:'#FFF0F5',rank:'1'},{name:'马鞍包',price:'239',desc:'复古做旧五金·翻盖设计·宽肩带',color:'#FFE8E0',rank:'2'},{name:'水桶包',price:'199',desc:'抽绳束口·pu拼接·轻量设计',color:'#E0FFF0',rank:'3'},{name:'手机包',price:'89',desc:'超迷你·竖款设计·出门必备',color:'#FFE0FF',rank:'4'},{name:'双肩妈咪包',price:'329',desc:'防水面料·多分区·轻便出行',color:'#E8E8FF',rank:'5'}],
-    [{name:'铆钉机车包',price:'279',desc:'朋克风·金属铆钉·软牛皮',color:'#F0F0F0',rank:'1'},{name:'编织草编包',price:'139',desc:'夏日限定·拉菲草·度假必备',color:'#FFF8DC',rank:'2'},{name:'枕头包',price:'209',desc:'蓬松柔软·尼龙面料·超大容量',color:'#FFE0EB',rank:'3'},{name:'剑桥包',price:'249',desc:'英伦学院风·磁吸翻盖·复古棕',color:'#FFF0E0',rank:'4'},{name:'流浪汉包',price:'179',desc:'慵懒随性·帆布拼接·斜挎',color:'#E0E8FF',rank:'5'}],
-    [{name:'菜篮子包',price:'159',desc:'开口设计·帆布内袋·日常百搭',color:'#FFE8D0',rank:'1'},{name:'信封手拿包',price:'119',desc:'极简线条·卡位设计·晚宴必备',color:'#FFE0E0',rank:'2'},{name:'拼接邮差包',price:'229',desc:'撞色拼接·大容量·学院风',color:'#E0F0FF',rank:'3'},{name:'透明果冻包',price:'99',desc:'PVC材质·夏日清新·沙滩必备',color:'#E8FFE8',rank:'4'},{name:'羊皮饺子包',price:'269',desc:'软糯手感·褶皱设计·轻奢质感',color:'#FFF0F0',rank:'5'}],
-    [{name:'鳄鱼纹凯莉包',price:'389',desc:'定型包·旋转锁扣·贵气名媛',color:'#F5E6E0',rank:'1'},{name:'毛毛流浪包',price:'199',desc:'仿兔毛·秋冬限定·柔软保暖',color:'#FFF0F5',rank:'2'},{name:'铆钉双肩包',price:'259',desc:'学院风·铆钉装饰·减龄必备',color:'#E8E0F0',rank:'3'},{name:'月牙包',price:'169',desc:'弧形设计·腋下包·法式优雅',color:'#FFE0D0',rank:'4'},{name:'风琴包',price:'299',desc:'多隔层·挺括包型·职场利器',color:'#E0F0E8',rank:'5'}],
-    [{name:'珍珠链条包',price:'189',desc:'珍珠装饰·小香风·约会必备',color:'#FFF0F0',rank:'1'},{name:'帆布托特包',price:'149',desc:'文艺印花·超大容量·学生党',color:'#F0F0FF',rank:'2'},{name:'褶皱腋下包',price:'179',desc:'仿羊皮·褶皱纹理·高级感',color:'#FFE8F0',rank:'3'},{name:'圆环手柄包',price:'229',desc:'木质圆环·复古文艺·小众款',color:'#FFF0E0',rank:'4'},{name:'铆钉流浪包',price:'259',desc:'做旧五金·流浪感·明星同款',color:'#F0E8E0',rank:'5'}],
-    [{name:'抽绳水桶包',price:'169',desc:'蝴蝶结抽绳·柔软皮质·少女感',color:'#FFE0F0',rank:'1'},{name:'口金包',price:'139',desc:'复古口金·刺绣面料·旗袍绝配',color:'#FFF8E0',rank:'2'},{name:'圆饼包',price:'189',desc:'圆形设计·可爱减龄·多色',color:'#FFE8E8',rank:'3'},{name:'编织托特',price:'279',desc:'手工编织·真皮拼接·度假风',color:'#FFF0D0',rank:'4'},{name:'机能胸包',price:'159',desc:'运动风·防水面料·街头潮人',color:'#E8E8E8',rank:'5'}],
-    [{name:'祖母格编织包',price:'149',desc:'手工钩针·复古花纹·文艺范',color:'#FFE8D0',rank:'1'},{name:'透明托特包',price:'119',desc:'PVC大容量·内胆包·通勤',color:'#E0F8FF',rank:'2'},{name:'流苏水桶包',price:'219',desc:'流苏装饰·波西米亚·度假风',color:'#FFE0E0',rank:'3'},{name:'贝壳包',price:'239',desc:'贝壳造型·硬挺包身·轻熟风',color:'#FFF0F5',rank:'4'},{name:'丝绒晚宴包',price:'199',desc:'丝绒面料·钻扣·派对女王',color:'#F0E0F0',rank:'5'}],
-    [{name:'毛呢格纹包',price:'269',desc:'秋冬限定·格纹毛呢·学院风',color:'#FFE8E8',rank:'1'},{name:'镂空编织包',price:'179',desc:'镂空设计·夏日清凉·手工感',color:'#FFF8E0',rank:'2'},{name:'撞色邮差包',price:'209',desc:'双色拼接·大容量·文艺复古',color:'#E0F0FF',rank:'3'},{name:'鳄鱼纹手机包',price:'129',desc:'竖款迷你·压花纹理·轻便',color:'#FFE0F0',rank:'4'},{name:'金属链腋下包',price:'189',desc:'粗链条·简约设计·ins爆款',color:'#F0F0F0',rank:'5'}],
-    [{name:'毛球装饰包',price:'159',desc:'毛球挂饰·可爱减龄·少女心',color:'#FFF0F5',rank:'1'},{name:'鳄鱼纹托特',price:'329',desc:'压纹真皮·大容量·气场全开',color:'#F0E8E0',rank:'2'},{name:'mini双肩包',price:'199',desc:'巴掌大小·可爱迷你·装饰包',color:'#FFE8F0',rank:'3'},{name:'草编水桶包',price:'149',desc:'天然草编·棉布内衬·田园风',color:'#FFF8DC',rank:'4'},{name:'链条腰包',price:'139',desc:'可腰可斜挎·运动风·实用',color:'#E8E8E8',rank:'5'}],
+  var dayIdx=new Date().getDate()%HOT_PRODUCTS.length;
+  var today=new Date().toISOString().slice(0,10);
+  var rotated=[];
+  for(var i=0;i<5;i++){
+    rotated.push(HOT_PRODUCTS[(dayIdx+i)%HOT_PRODUCTS.length]);
+  }
+
+  var html='<h3>🏆 '+today+' 热销排行</h3>';
+  rotated.forEach(function(p,i){
+    html+='<div class="hot-card"><div class="himg" style="background:'+p.color+'22">'+p.icon+'</div><div class="hinfo"><div class="hname">'+p.name+'</div><div class="hprice">'+p.price+'</div><div class="hdesc">'+p.desc+'</div></div><div class="hrank">'+(i+1)+'</div></div>';
+  });
+  $('#hotList').innerHTML=html;
+
+  // AI remix suggestions
+  var remixes=[
+    {idea:'把「链条包」的链条换成珍珠链，搭配「水桶包」的抽绳设计 —— 珍珠抽绳链条包，甜酷风拉满',tags:['珍珠元素','甜酷混搭','链条改造']},
+    {idea:'「托特包」内部加可拆卸内胆包，秒变双面包 —— 一面通勤一面逛街，一包两用',tags:['可拆卸设计','一包多用','通勤百变']},
+    {idea:'「草编包」+「果冻包」材质混搭 —— 透明PVC外层+草编内衬，夏日清凉又有质感',tags:['材质混搭','夏日限定','透明风']},
   ];
-  var products=allProducts[dayIdx];
-  var dateStr=(today.getMonth()+1)+'月'+today.getDate()+'日';
-  $('#hotList').innerHTML='<h3>📅 '+dateStr+' 箱包爆款榜单</h3>'+products.map(function(p){return '<div class="hot-card"><div class="himg" style="background:'+p.color+'">👜</div><div class="hinfo"><div class="hname">'+p.name+'</div><div class="hprice">¥'+p.price+'</div><div class="hdesc">'+p.desc+'</div></div><div class="hrank">🔥'+p.rank+'</div></div>';}).join('');
-  var top=products[0];var second=products[1];
-  var aiIdeas=['加入可拆卸链条，一包两背','改用撞色缝线，增加设计感','添加子母袋组合，提高实用性','内侧加卡位+拉链暗袋','换用竹节手柄，中国风元素','增加磁吸翻盖，防丢设计','压印品牌logo烫金工艺','推出mini+大号尺寸组合'];
-  var pick=aiIdeas[dayIdx%aiIdeas.length];
-  $('#aiRemix').innerHTML='<div class="ai-card"><h4>🤖 AI改款建议</h4><div class="ai-idea">基于今日爆款<b>「'+top.name+'」</b>（¥'+top.price+'）和<b>「'+second.name+'」</b>（¥'+second.price+'），AI建议：<br><br>📌 <b>'+pick+'</b><br><br>新款预估定价：¥'+(parseInt(top.price)+60)+'起</div><div class="ai-tags"><span class="ai-tag">#新款设计</span><span class="ai-tag">#差异化</span><span class="ai-tag">#箱包爆改</span><span class="ai-tag">#AI设计</span></div></div>';
+  var remix=remixes[dayIdx%remixes.length];
+  $('#aiRemix').innerHTML='<div class="ai-card"><h4>🤖 AI 搭配灵感</h4><div class="ai-idea">'+remix.idea+'</div><div class="ai-tags">'+remix.tags.map(function(t){return '<span class="ai-tag">#'+t+'</span>';}).join('')+'</div></div>';
 }
 
 // ============ 初始化 ============
 function init(){
-  setupNav();
   renderDateStrip();
-  renderCourses();
   renderTimer();
-  renderWeekPlan();
-  renderDiet();
   setupIntensity();
+  renderCourses();
+  renderDiet();
+  renderWeekPlan();
+  setupNav();
   setupEngTabs();
   setupFlashcard();
-  loadEngLearned();
+  renderFlashcard();
   renderEngContent();
-  renderDailyQuote();
+  renderQuote();
   renderOutfit();
   renderMood();
-  renderBooks();
-  renderKids();
+  renderAllBooks();
+  setupReadingNotes();
   setupKidsTabs();
+  renderKidsContent();
   renderHot();
-  $('#btnStart').addEventListener('click', toggleTimer);
-  $('#btnReset').addEventListener('click', resetTimer);
+
+  // Timer buttons
+  $('#btnStart').addEventListener('click',toggleTimer);
+  $('#btnReset').addEventListener('click',resetTimer);
 }
-document.addEventListener('DOMContentLoaded', init);
+
+document.addEventListener('DOMContentLoaded',init);
